@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 /**
  * 动态的获取分表的范围 也就是在启动后 修改了配置
  */
-@Component
+//@Component
 @Slf4j
 public class DynamicShardingManager {
 
