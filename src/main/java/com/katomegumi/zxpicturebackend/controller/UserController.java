@@ -20,6 +20,7 @@ import com.katomegumi.zxpicturebackend.model.vo.LoginUserVO;
 import com.katomegumi.zxpicturebackend.model.vo.UserVO;
 import com.katomegumi.zxpicturebackend.service.UserService;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -32,6 +33,7 @@ import java.util.List;
 public class UserController {
 
         @Resource
+        @Lazy
         private UserService userService;
 
         /**

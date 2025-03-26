@@ -22,6 +22,6 @@ public class PictureTagCategory implements Serializable {
     /**
      * 分类
      */
-    private List<String> setCategoryList;
+    private List<String> CategoryList;
 
 }

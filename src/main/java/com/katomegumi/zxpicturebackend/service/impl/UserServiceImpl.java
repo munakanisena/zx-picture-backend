@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.katomegumi.zxpicturebackend.controller.UserController;
 import com.katomegumi.zxpicturebackend.exception.BusinessException;
 import com.katomegumi.zxpicturebackend.exception.ErrorCode;
 import com.katomegumi.zxpicturebackend.manager.auth.StpKit.StpKit;
@@ -16,6 +17,7 @@ import com.katomegumi.zxpicturebackend.model.vo.UserVO;
 import com.katomegumi.zxpicturebackend.service.UserService;
 import com.katomegumi.zxpicturebackend.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -40,6 +42,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Resource
     private UserMapper userMapper;
+
+    @Autowired
+    private UserController userController;
 
     @Override
     public Long register(String userAccount, String userPassword, String confirmPassword) {
@@ -68,11 +73,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         String password = getEncryptPassword(userPassword);
 
-        User user = User.builder()
-                .userAccount(userAccount)
-                .userPassword(password)
-                .userName("无名")
-                .build();
+        User user = new User();
+        user.setUserAccount(userAccount);
+        user.setUserPassword(userPassword);
+        user.setUserName("无名");
 
         boolean result = this.save(user);
 

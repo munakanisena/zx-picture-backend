@@ -317,7 +317,7 @@ public class PictureController {
         List<String> tagList = Arrays.asList("热门", "搞笑", "生活", "高清", "艺术", "校园", "背景", "简历", "创意");
         List<String> categoryList = Arrays.asList("模板", "电商", "表情包", "素材", "海报");
         pictureTagCategory.setTagList(tagList);
-        pictureTagCategory.setSetCategoryList(categoryList);
+        pictureTagCategory.setCategoryList(categoryList);
         return ResultUtils.success(pictureTagCategory);
     }
 

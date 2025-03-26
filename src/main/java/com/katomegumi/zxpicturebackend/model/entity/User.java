@@ -14,7 +14,6 @@ import lombok.Data;
  */
 @TableName(value ="tb_user")
 @Data
-@Builder
 public class User implements Serializable {
     /**
      * id
