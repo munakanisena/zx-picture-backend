@@ -2,11 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.katomegumi</groupId>
     <artifactId>zx-picture-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>zx-picture-backend</name>
     <description>zx-picture-backend</description>
+
     <properties>
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,12 +31,13 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.5.10.1</version>
         </dependency>
-
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
+        <!--仅在运行时（Runtime）需要，而在编译时（Compile）不需要。-->
             <scope>runtime</scope>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

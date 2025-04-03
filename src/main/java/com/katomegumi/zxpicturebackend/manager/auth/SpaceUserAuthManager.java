@@ -26,6 +26,8 @@ import java.util.List;
  */
 @Component
 public class SpaceUserAuthManager {
+
+
     public static final SpaceUserAuthConfig SPACE_USER_AUTH_CONFIG;
 
     @Resource
@@ -57,6 +59,9 @@ public class SpaceUserAuthManager {
         }
         return spaceUserRole.getPermissions();
     }
+
+
+
     public List<String> getPermissionList(Space space, User loginUser) {
         if (loginUser == null) {
             return new ArrayList<>();

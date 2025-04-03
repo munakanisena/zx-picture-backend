@@ -1,5 +1,7 @@
 package com.katomegumi.zxpicturebackend.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -75,6 +77,7 @@ public class PictureController {
      * 上传图片（可重新上传）
      */
     @PostMapping("/upload")
+    //@SaCheckPermission(type = "space"  ,value = SpaceUserPermissionConstant.SPACE_USER_MANAGE)
     //@AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     @SaSpaceCheckPermission(value = SpaceUserPermissionConstant.PICTURE_UPLOAD)
     public BaseResponse<PictureVO> uploadPicture(
