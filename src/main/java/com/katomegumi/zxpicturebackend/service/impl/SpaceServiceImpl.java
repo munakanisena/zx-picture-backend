@@ -97,8 +97,6 @@ public class SpaceServiceImpl extends ServiceImpl<SpaceMapper, Space>
         //针对用户加锁 避免多线程情况下 用户创建多个空间
         //TODO 后续考虑使用redis 的redisson完成
         String lock=String.valueOf(userId).intern();
-
-
         synchronized (lock){
             Long newSpaceId = transactionTemplate.execute(status -> {
                 boolean exists = this.lambdaQuery()

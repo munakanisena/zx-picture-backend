@@ -93,7 +93,7 @@ public class PictureQueryRequest extends PageRequest implements Serializable {
     private Long spaceId;
 
     /**
-     * 是否只查询 spaceId 为 null 的数据
+     * 是否只查询 spaceId 为 null 的数据 也就是公共图库
      */
     private boolean nullSpaceId;
 

@@ -51,8 +51,8 @@ public class SpaceController {
     public BaseResponse<Long> addSpace(@RequestBody SpaceAddRequest spaceAddRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(spaceAddRequest==null, ErrorCode.PARAMS_ERROR);
         User loginUser = userService.getLoginUser(request);
-        long userId = spaceService.addSpace(spaceAddRequest, loginUser);
-        return ResultUtils.success(userId);
+        long newSpaceId = spaceService.addSpace(spaceAddRequest, loginUser);
+        return ResultUtils.success(newSpaceId);
     }
     /**
      * 更新空间
