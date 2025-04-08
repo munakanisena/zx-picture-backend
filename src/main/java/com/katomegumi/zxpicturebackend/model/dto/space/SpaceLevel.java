@@ -14,7 +14,7 @@ public class SpaceLevel {
      */
     private String text;
     /**
-     * 指
+     * 值
      */
     private int value;
 
