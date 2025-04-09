@@ -107,7 +107,7 @@ public class SpaceServiceImpl extends ServiceImpl<SpaceMapper, Space>
                 boolean result = save(space);
                 ThrowUtils.throwIf(!result, ErrorCode.SYSTEM_ERROR,"保存到数据库失败，请重试");
                 //在创建空间的时候 如果是创建的团队空间 自动创建空间用户表(设置为管理员)
-                if (spaceAddRequest.getSpaceType()==SpaceTypeEnum.TEAM.getValue()){
+                if (space.getSpaceType()==SpaceTypeEnum.TEAM.getValue()){
                     SpaceUser spaceUser = new SpaceUser();
                     spaceUser.setUserId(userId);
                     spaceUser.setSpaceId(space.getId());
