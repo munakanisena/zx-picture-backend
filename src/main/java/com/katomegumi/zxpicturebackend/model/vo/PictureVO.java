@@ -78,6 +78,11 @@ public class PictureVO implements Serializable {
     private Long userId;
 
     /**
+     * 空间 id
+     */
+    private Long spaceId;
+
+    /**
      * 权限列表
      */
     private List<String> permissionList = new ArrayList<>();

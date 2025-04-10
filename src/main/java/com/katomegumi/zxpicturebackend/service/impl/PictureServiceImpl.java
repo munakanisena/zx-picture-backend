@@ -193,7 +193,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
             if (finalSpaceId!=null) {
                 boolean update = spaceService.lambdaUpdate()
                         .eq(Space::getId, finalSpaceId)
-                        .setSql("totalSize=totalSize" + picture.getPicSize())
+                        .setSql("totalSize= totalSize +" + picture.getPicSize())
                         .setSql("totalCount=totalCount+1")
                         .update();
                 ThrowUtils.throwIf(!update, ErrorCode.OPERATION_ERROR, "更新图库空间失败");
@@ -503,6 +503,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
             cosManager.deleteObject(thumbnailUrl.substring(i1));
         }
     }
+
     @Override
     public void checkPictureAuth(User loginUser, Picture picture) {
         Long spaceId = picture.getSpaceId();
@@ -619,6 +620,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
             throw new BusinessException(ErrorCode.OPERATION_ERROR,"名称解析错误");
         }
     }
+
 
     @Override
     public CreateOutPaintingTaskResponse createPictureOutPaintingTask(CreatePictureOutPaintingTaskRequest createPictureOutPaintingTaskRequest, User loginUser) {
