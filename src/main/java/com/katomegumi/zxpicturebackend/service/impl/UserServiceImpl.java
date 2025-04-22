@@ -23,6 +23,7 @@ import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,6 +138,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public User getLoginUser(HttpServletRequest request) {
+        HttpSession session = request.getSession();
         Object objUser = request.getSession().getAttribute(USER_LOGIN_STATE);
         User user = (User) objUser;
         if (user == null||user.getId()==null) {

@@ -1,7 +1,5 @@
 package com.katomegumi.zxpicturebackend.controller;
 
-import cn.dev33.satoken.annotation.SaCheckPermission;
-import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -9,9 +7,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.katomegumi.zxpicturebackend.annotation.AuthCheck;
+import com.katomegumi.zxpicturebackend.api.ImageSearchApiFacade;
 import com.katomegumi.zxpicturebackend.api.aliyunai.AliYunAiApi;
 import com.katomegumi.zxpicturebackend.api.aliyunai.model.CreateOutPaintingTaskResponse;
 import com.katomegumi.zxpicturebackend.api.aliyunai.model.GetOutPaintingTaskResponse;
+import com.katomegumi.zxpicturebackend.api.imagesearch.model.ImageSearchResult;
 import com.katomegumi.zxpicturebackend.common.BaseResponse;
 import com.katomegumi.zxpicturebackend.common.DeleteRequest;
 import com.katomegumi.zxpicturebackend.common.ResultUtils;
@@ -399,5 +399,20 @@ public class PictureController {
         GetOutPaintingTaskResponse task = aliYunAiApi.getOutPaintingTask(taskId);
         return ResultUtils.success(task);
     }
+
+    /**
+     * 以图搜图
+     */
+    @PostMapping("/search/picture")
+    public BaseResponse<List<ImageSearchResult>> searchPictureByPicture(@RequestBody SearchPictureByPictureRequest searchPictureByPictureRequest) {
+        ThrowUtils.throwIf(searchPictureByPictureRequest == null, ErrorCode.PARAMS_ERROR);
+        Long pictureId = searchPictureByPictureRequest.getPictureId();
+        ThrowUtils.throwIf(pictureId == null || pictureId <= 0, ErrorCode.PARAMS_ERROR);
+        Picture oldPicture = pictureService.getById(pictureId);
+        ThrowUtils.throwIf(oldPicture == null, ErrorCode.NOT_FOUND_ERROR);
+        List<ImageSearchResult> resultList = ImageSearchApiFacade.searchImage(oldPicture.getUrl());
+        return ResultUtils.success(resultList);
+    }
+
 //
 }
