@@ -1,14 +1,14 @@
 package com.katomegumi.zxpicturebackend.controller;
 
-import com.katomegumi.zxpicturebackend.api.aliyunai.model.SpaceSizeAnalyzeRequest;
-import com.katomegumi.zxpicturebackend.common.BaseResponse;
-import com.katomegumi.zxpicturebackend.common.ResultUtils;
-import com.katomegumi.zxpicturebackend.exception.ErrorCode;
-import com.katomegumi.zxpicturebackend.exception.ThrowUtils;
+import com.katomegumi.zxpicturebackend.core.api.aliyunai.model.SpaceSizeAnalyzeRequest;
+import com.katomegumi.zxpicturebackend.core.common.resp.BaseResponse;
+import com.katomegumi.zxpicturebackend.core.common.util.ResultUtils;
+import com.katomegumi.zxpicturebackend.core.common.exception.ErrorCode;
+import com.katomegumi.zxpicturebackend.core.common.exception.ThrowUtils;
 import com.katomegumi.zxpicturebackend.model.dto.space.analyze.*;
-import com.katomegumi.zxpicturebackend.model.entity.Space;
+import com.katomegumi.zxpicturebackend.model.dao.entity.Space;
 import com.katomegumi.zxpicturebackend.model.vo.space.analyze.*;
-import com.katomegumi.zxpicturebackend.model.entity.User;
+import com.katomegumi.zxpicturebackend.model.dao.entity.User;
 import com.katomegumi.zxpicturebackend.service.SpaceAnalyzeService;
 import com.katomegumi.zxpicturebackend.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;

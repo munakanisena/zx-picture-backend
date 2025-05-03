@@ -6,16 +6,16 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.katomegumi.zxpicturebackend.controller.UserController;
-import com.katomegumi.zxpicturebackend.exception.BusinessException;
-import com.katomegumi.zxpicturebackend.exception.ErrorCode;
+import com.katomegumi.zxpicturebackend.core.common.exception.BusinessException;
+import com.katomegumi.zxpicturebackend.core.common.exception.ErrorCode;
 import com.katomegumi.zxpicturebackend.manager.auth.StpKit.StpKit;
 import com.katomegumi.zxpicturebackend.model.dto.user.UserQueryRequest;
-import com.katomegumi.zxpicturebackend.model.entity.User;
+import com.katomegumi.zxpicturebackend.model.dao.entity.User;
 import com.katomegumi.zxpicturebackend.model.enums.UserRoleEnum;
 import com.katomegumi.zxpicturebackend.model.vo.LoginUserVO;
 import com.katomegumi.zxpicturebackend.model.vo.UserVO;
 import com.katomegumi.zxpicturebackend.service.UserService;
-import com.katomegumi.zxpicturebackend.mapper.UserMapper;
+import com.katomegumi.zxpicturebackend.model.dao.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.katomegumi.zxpicturebackend.constant.UserConstant.USER_LOGIN_STATE;
+import static com.katomegumi.zxpicturebackend.core.constant.UserConstant.USER_LOGIN_STATE;
 
 /**
  * @author lirui

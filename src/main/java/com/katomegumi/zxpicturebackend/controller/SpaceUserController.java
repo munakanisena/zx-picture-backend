@@ -1,19 +1,19 @@
 package com.katomegumi.zxpicturebackend.controller;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.katomegumi.zxpicturebackend.common.BaseResponse;
-import com.katomegumi.zxpicturebackend.common.DeleteRequest;
-import com.katomegumi.zxpicturebackend.common.ResultUtils;
-import com.katomegumi.zxpicturebackend.exception.BusinessException;
-import com.katomegumi.zxpicturebackend.exception.ErrorCode;
-import com.katomegumi.zxpicturebackend.exception.ThrowUtils;
+import com.katomegumi.zxpicturebackend.core.common.resp.BaseResponse;
+import com.katomegumi.zxpicturebackend.core.common.req.DeleteRequest;
+import com.katomegumi.zxpicturebackend.core.common.util.ResultUtils;
+import com.katomegumi.zxpicturebackend.core.common.exception.BusinessException;
+import com.katomegumi.zxpicturebackend.core.common.exception.ErrorCode;
+import com.katomegumi.zxpicturebackend.core.common.exception.ThrowUtils;
 import com.katomegumi.zxpicturebackend.manager.auth.annotation.SaSpaceCheckPermission;
 import com.katomegumi.zxpicturebackend.manager.auth.model.SpaceUserPermissionConstant;
 import com.katomegumi.zxpicturebackend.model.dto.spaceuser.SpaceUserAddRequest;
 import com.katomegumi.zxpicturebackend.model.dto.spaceuser.SpaceUserEditRequest;
 import com.katomegumi.zxpicturebackend.model.dto.spaceuser.SpaceUserQueryRequest;
-import com.katomegumi.zxpicturebackend.model.entity.SpaceUser;
-import com.katomegumi.zxpicturebackend.model.entity.User;
+import com.katomegumi.zxpicturebackend.model.dao.entity.SpaceUser;
+import com.katomegumi.zxpicturebackend.model.dao.entity.User;
 import com.katomegumi.zxpicturebackend.model.vo.SpaceUserVO;
 import com.katomegumi.zxpicturebackend.service.SpaceUserService;
 import com.katomegumi.zxpicturebackend.service.UserService;

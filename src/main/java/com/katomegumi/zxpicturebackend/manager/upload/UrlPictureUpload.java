@@ -6,9 +6,9 @@ import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpStatus;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
-import com.katomegumi.zxpicturebackend.exception.BusinessException;
-import com.katomegumi.zxpicturebackend.exception.ErrorCode;
-import com.katomegumi.zxpicturebackend.exception.ThrowUtils;
+import com.katomegumi.zxpicturebackend.core.common.exception.BusinessException;
+import com.katomegumi.zxpicturebackend.core.common.exception.ErrorCode;
+import com.katomegumi.zxpicturebackend.core.common.exception.ThrowUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.File;

@@ -1,8 +1,8 @@
 package com.katomegumi.zxpicturebackend.manager.auth.model;
 
-import com.katomegumi.zxpicturebackend.model.entity.Picture;
-import com.katomegumi.zxpicturebackend.model.entity.Space;
-import com.katomegumi.zxpicturebackend.model.entity.SpaceUser;
+import com.katomegumi.zxpicturebackend.model.dao.entity.Picture;
+import com.katomegumi.zxpicturebackend.model.dao.entity.Space;
+import com.katomegumi.zxpicturebackend.model.dao.entity.SpaceUser;
 import lombok.Data;
 
 /**

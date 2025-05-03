@@ -2,7 +2,7 @@ package com.katomegumi.zxpicturebackend.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.katomegumi.zxpicturebackend.model.dto.user.UserQueryRequest;
-import com.katomegumi.zxpicturebackend.model.entity.User;
+import com.katomegumi.zxpicturebackend.model.dao.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.katomegumi.zxpicturebackend.model.vo.LoginUserVO;
 import com.katomegumi.zxpicturebackend.model.vo.UserVO;

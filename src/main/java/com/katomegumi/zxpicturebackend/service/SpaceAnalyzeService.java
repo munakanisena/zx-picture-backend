@@ -1,11 +1,11 @@
 package com.katomegumi.zxpicturebackend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.katomegumi.zxpicturebackend.api.aliyunai.model.SpaceSizeAnalyzeRequest;
+import com.katomegumi.zxpicturebackend.core.api.aliyunai.model.SpaceSizeAnalyzeRequest;
 import com.katomegumi.zxpicturebackend.model.dto.space.analyze.*;
 import com.katomegumi.zxpicturebackend.model.vo.space.analyze.*;
-import com.katomegumi.zxpicturebackend.model.entity.Space;
-import com.katomegumi.zxpicturebackend.model.entity.User;
+import com.katomegumi.zxpicturebackend.model.dao.entity.Space;
+import com.katomegumi.zxpicturebackend.model.dao.entity.User;
 
 import java.util.List;
 

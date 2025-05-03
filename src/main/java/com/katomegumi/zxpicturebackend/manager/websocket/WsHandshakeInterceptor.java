@@ -1,9 +1,9 @@
 package com.katomegumi.zxpicturebackend.manager.websocket;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.katomegumi.zxpicturebackend.model.entity.Picture;
-import com.katomegumi.zxpicturebackend.model.entity.Space;
-import com.katomegumi.zxpicturebackend.model.entity.User;
+import com.katomegumi.zxpicturebackend.model.dao.entity.Picture;
+import com.katomegumi.zxpicturebackend.model.dao.entity.Space;
+import com.katomegumi.zxpicturebackend.model.dao.entity.User;
 import com.katomegumi.zxpicturebackend.model.enums.SpaceTypeEnum;
 import com.katomegumi.zxpicturebackend.service.PictureService;
 import com.katomegumi.zxpicturebackend.service.SpaceService;

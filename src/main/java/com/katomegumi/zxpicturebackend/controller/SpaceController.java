@@ -4,18 +4,18 @@ package com.katomegumi.zxpicturebackend.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 
-import com.katomegumi.zxpicturebackend.annotation.AuthCheck;
-import com.katomegumi.zxpicturebackend.common.BaseResponse;
-import com.katomegumi.zxpicturebackend.common.DeleteRequest;
-import com.katomegumi.zxpicturebackend.common.ResultUtils;
-import com.katomegumi.zxpicturebackend.constant.UserConstant;
-import com.katomegumi.zxpicturebackend.exception.BusinessException;
-import com.katomegumi.zxpicturebackend.exception.ErrorCode;
-import com.katomegumi.zxpicturebackend.exception.ThrowUtils;
+import com.katomegumi.zxpicturebackend.core.annotation.AuthCheck;
+import com.katomegumi.zxpicturebackend.core.common.resp.BaseResponse;
+import com.katomegumi.zxpicturebackend.core.common.req.DeleteRequest;
+import com.katomegumi.zxpicturebackend.core.common.util.ResultUtils;
+import com.katomegumi.zxpicturebackend.core.constant.UserConstant;
+import com.katomegumi.zxpicturebackend.core.common.exception.BusinessException;
+import com.katomegumi.zxpicturebackend.core.common.exception.ErrorCode;
+import com.katomegumi.zxpicturebackend.core.common.exception.ThrowUtils;
 import com.katomegumi.zxpicturebackend.manager.auth.SpaceUserAuthManager;
 import com.katomegumi.zxpicturebackend.model.dto.space.*;
-import com.katomegumi.zxpicturebackend.model.entity.Space;
-import com.katomegumi.zxpicturebackend.model.entity.User;
+import com.katomegumi.zxpicturebackend.model.dao.entity.Space;
+import com.katomegumi.zxpicturebackend.model.dao.entity.User;
 import com.katomegumi.zxpicturebackend.model.enums.SpaceLevelEnum;
 import com.katomegumi.zxpicturebackend.model.vo.SpaceVO;
 import com.katomegumi.zxpicturebackend.service.SpaceService;

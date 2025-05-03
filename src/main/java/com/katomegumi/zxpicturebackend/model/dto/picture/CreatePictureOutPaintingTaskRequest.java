@@ -1,6 +1,6 @@
 package com.katomegumi.zxpicturebackend.model.dto.picture;
 
-import com.katomegumi.zxpicturebackend.api.aliyunai.model.CreateOutPaintingTaskRequest;
+import com.katomegumi.zxpicturebackend.core.api.aliyunai.model.CreateOutPaintingTaskRequest;
 import lombok.Data;
 
 import java.io.Serializable;

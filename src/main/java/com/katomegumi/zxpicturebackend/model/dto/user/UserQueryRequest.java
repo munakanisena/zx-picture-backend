@@ -2,7 +2,7 @@ package com.katomegumi.zxpicturebackend.model.dto.user;
 
 
 
-import com.katomegumi.zxpicturebackend.common.PageRequest;
+import com.katomegumi.zxpicturebackend.core.common.req.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

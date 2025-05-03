@@ -2,14 +2,13 @@ package com.katomegumi.zxpicturebackend.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.katomegumi.zxpicturebackend.api.aliyunai.model.CreateOutPaintingTaskResponse;
+import com.katomegumi.zxpicturebackend.core.api.aliyunai.model.CreateOutPaintingTaskResponse;
 import com.katomegumi.zxpicturebackend.model.dto.picture.*;
-import com.katomegumi.zxpicturebackend.model.entity.Picture;
+import com.katomegumi.zxpicturebackend.model.dao.entity.Picture;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.katomegumi.zxpicturebackend.model.entity.User;
+import com.katomegumi.zxpicturebackend.model.dao.entity.User;
 import com.katomegumi.zxpicturebackend.model.vo.PictureVO;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

@@ -3,7 +3,7 @@ package com.katomegumi.zxpicturebackend.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.katomegumi.zxpicturebackend.model.dto.spaceuser.SpaceUserAddRequest;
 import com.katomegumi.zxpicturebackend.model.dto.spaceuser.SpaceUserQueryRequest;
-import com.katomegumi.zxpicturebackend.model.entity.SpaceUser;
+import com.katomegumi.zxpicturebackend.model.dao.entity.SpaceUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.katomegumi.zxpicturebackend.model.vo.SpaceUserVO;
 

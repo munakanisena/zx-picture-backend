@@ -10,16 +10,15 @@ import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.Header;
 import cn.hutool.json.JSONUtil;
-import com.katomegumi.zxpicturebackend.exception.BusinessException;
-import com.katomegumi.zxpicturebackend.exception.ErrorCode;
+import com.katomegumi.zxpicturebackend.core.common.exception.BusinessException;
+import com.katomegumi.zxpicturebackend.core.common.exception.ErrorCode;
 import com.katomegumi.zxpicturebackend.manager.auth.StpKit.StpKit;
-import com.katomegumi.zxpicturebackend.manager.auth.model.SpaceUserAuthConfig;
 import com.katomegumi.zxpicturebackend.manager.auth.model.SpaceUserAuthContext;
 import com.katomegumi.zxpicturebackend.manager.auth.model.SpaceUserPermissionConstant;
-import com.katomegumi.zxpicturebackend.model.entity.Picture;
-import com.katomegumi.zxpicturebackend.model.entity.Space;
-import com.katomegumi.zxpicturebackend.model.entity.SpaceUser;
-import com.katomegumi.zxpicturebackend.model.entity.User;
+import com.katomegumi.zxpicturebackend.model.dao.entity.Picture;
+import com.katomegumi.zxpicturebackend.model.dao.entity.Space;
+import com.katomegumi.zxpicturebackend.model.dao.entity.SpaceUser;
+import com.katomegumi.zxpicturebackend.model.dao.entity.User;
 import com.katomegumi.zxpicturebackend.model.enums.SpaceRoleEnum;
 import com.katomegumi.zxpicturebackend.model.enums.SpaceTypeEnum;
 import com.katomegumi.zxpicturebackend.service.PictureService;
@@ -35,7 +34,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-import static com.katomegumi.zxpicturebackend.constant.UserConstant.USER_LOGIN_STATE;
+import static com.katomegumi.zxpicturebackend.core.constant.UserConstant.USER_LOGIN_STATE;
 
 /**
  * 自定义权限加载接口实现类 最好只使用一个校验方法 避免混乱

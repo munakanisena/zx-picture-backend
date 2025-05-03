@@ -5,7 +5,7 @@ import com.katomegumi.zxpicturebackend.manager.websocket.PictureEditHandler;
 import com.katomegumi.zxpicturebackend.manager.websocket.model.PictureEditMessageTypeEnum;
 import com.katomegumi.zxpicturebackend.manager.websocket.model.PictureEditRequestMessage;
 import com.katomegumi.zxpicturebackend.manager.websocket.model.PictureEditResponseMessage;
-import com.katomegumi.zxpicturebackend.model.entity.User;
+import com.katomegumi.zxpicturebackend.model.dao.entity.User;
 import com.katomegumi.zxpicturebackend.service.UserService;
 import com.lmax.disruptor.WorkHandler;
 import lombok.extern.slf4j.Slf4j;

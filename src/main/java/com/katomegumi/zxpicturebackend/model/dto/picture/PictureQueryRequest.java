@@ -1,6 +1,6 @@
 package com.katomegumi.zxpicturebackend.model.dto.picture;
 
-import com.katomegumi.zxpicturebackend.common.PageRequest;
+import com.katomegumi.zxpicturebackend.core.common.req.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

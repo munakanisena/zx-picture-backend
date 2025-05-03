@@ -1,7 +1,7 @@
 package com.katomegumi.zxpicturebackend.manager.websocket.disruptor;
 
 import com.katomegumi.zxpicturebackend.manager.websocket.model.PictureEditRequestMessage;
-import com.katomegumi.zxpicturebackend.model.entity.User;
+import com.katomegumi.zxpicturebackend.model.dao.entity.User;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import lombok.extern.slf4j.Slf4j;

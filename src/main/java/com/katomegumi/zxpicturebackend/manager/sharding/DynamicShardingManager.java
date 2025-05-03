@@ -1,7 +1,7 @@
 package com.katomegumi.zxpicturebackend.manager.sharding;
 
 import com.baomidou.mybatisplus.extension.toolkit.SqlRunner;
-import com.katomegumi.zxpicturebackend.model.entity.Space;
+import com.katomegumi.zxpicturebackend.model.dao.entity.Space;
 import com.katomegumi.zxpicturebackend.model.enums.SpaceLevelEnum;
 import com.katomegumi.zxpicturebackend.model.enums.SpaceTypeEnum;
 import com.katomegumi.zxpicturebackend.service.SpaceService;
@@ -12,7 +12,6 @@ import org.apache.shardingsphere.mode.manager.ContextManager;
 import org.apache.shardingsphere.sharding.api.config.ShardingRuleConfiguration;
 import org.apache.shardingsphere.sharding.api.config.rule.ShardingTableRuleConfiguration;
 import org.apache.shardingsphere.sharding.rule.ShardingRule;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
