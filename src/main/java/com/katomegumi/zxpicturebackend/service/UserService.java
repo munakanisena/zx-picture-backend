@@ -1,98 +1,103 @@
 package com.katomegumi.zxpicturebackend.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.katomegumi.zxpicturebackend.model.dto.user.UserQueryRequest;
-import com.katomegumi.zxpicturebackend.model.dao.entity.User;
+import com.katomegumi.zxpicturebackend.manager.email.model.EmailRequest;
+import com.katomegumi.zxpicturebackend.model.dao.entity.UserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.katomegumi.zxpicturebackend.model.vo.LoginUserVO;
-import com.katomegumi.zxpicturebackend.model.vo.UserVO;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import com.katomegumi.zxpicturebackend.model.dto.user.*;
+import com.katomegumi.zxpicturebackend.model.vo.PageVO;
+import com.katomegumi.zxpicturebackend.model.vo.user.LoginUserDetailVO;
+import com.katomegumi.zxpicturebackend.model.vo.user.UserDetailVO;
+import com.katomegumi.zxpicturebackend.model.vo.user.UserVO;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
 * @author lirui
-* @description 针对表【tb_user(用户)】的数据库操作Service
-* @createDate 2025-02-04 18:59:15
+* @description 针对表【user_info(用户信息表)】的数据库操作Service
+* @createDate 2025-05-07 17:17:08
 */
-public interface UserService extends IService<User> {
+public interface UserService extends IService<UserInfo> {
+    /**
+     * 发送邮件验证码
+     * @param emailRequest 用户邮箱
+     * @return 发送成功
+     */
+    void sendEmailRegisterCaptcha(EmailRequest emailRequest);
+
     /**
      * 用户注册
-     * @param username
-     * @param password
-     * @param confirmPassword
+     * @param registerRequest 用户注册信息
      * @return
      */
-    Long register(String username, String password, String confirmPassword);
-
+    void register(UserRegisterRequest registerRequest);
 
     /**
      * 用户登录
-     *
-     * @param userAccount  用户账户
-     * @param userPassword 用户密码
-     * @param request
-     * @return 脱敏后的用户信息
-     */
-    LoginUserVO userLogin(String userAccount, String userPassword, HttpServletRequest request);
-
-    /**
-     * 密码加密
-     * @param userPassword
+     * @param userLoginRequest 用户登录信息
      * @return
      */
-    String getEncryptPassword(String userPassword);
+    LoginUserDetailVO login(UserLoginRequest userLoginRequest);
 
     /**
-     * 获取当前登录用户
-     *
-     * @param request
+     * 发送密码重置邮件
+     * @param emailRequest
+     */
+    void forgotPassword(EmailRequest emailRequest);
+
+
+    /**
+     * 重置密码
+     * @param userResetPasswordRequest
+     */
+    void resetPassword(UserResetPasswordRequest userResetPasswordRequest);
+
+    /**
+     * 用户退出 清除sa-token登录态
+     */
+    void userLogout();
+
+    /**
+     * 获取用户详情
+     * @return 用户详情
+     */
+    LoginUserDetailVO getLoginUserDetail();
+
+    /**
+     * 上传用户头像
+     * @param avatarFile
+     * @return 用户头像url
+     */
+    String uploadAvatar(MultipartFile avatarFile);
+
+    /**
+     * 用户 自身编辑
+     * @param userEditRequest
+     */
+    void editUserInfo(UserEditRequest userEditRequest);
+
+    /**
+     * 通过id获取用户
+     * @param userId
      * @return
      */
-    User getLoginUser(HttpServletRequest request);
+    UserDetailVO getUserDetailById(Long userId);
+
 
     /**
-     * 转换User为UserVO
-     * @param user
-     * @return
+     * 删除用户 管理员权限
+     * @param id 用户id
      */
-    LoginUserVO getLoginUserVO(User user);
+    void deleteUserById(Long id);
 
     /**
-     * 用户注销
-     *
-     * @param request
-     * @return
+     * 管理员更新用户信息
+     * @param userUpdateRequest
      */
-    boolean userLogout(HttpServletRequest request);
+    void updateUserById(UserUpdateRequest userUpdateRequest);
 
     /**
-     * user转换为 userVO
-     * @param user
-     * @return
-     */
-    UserVO getUserVO(User user);
-
-    /**
-     * 批量转换 user转换为 userVO
-     * @param users
-     * @return
-     */
-    List<UserVO> getUserVOList(List<User> users);
-
-    /**
-     * 通过传来的 直接获取queryWrapper对象 实现查询
+     * 分页查询用户信息 管理员权限
      * @param userQueryRequest
      * @return
      */
-    QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
-
-    /**
-     * 是否为管理员
-     *
-     * @param user
-     * @return
-     */
-    boolean isAdmin(User user);
-
+    PageVO<UserVO> getUserPageListAsManage(UserQueryRequest userQueryRequest);
 }

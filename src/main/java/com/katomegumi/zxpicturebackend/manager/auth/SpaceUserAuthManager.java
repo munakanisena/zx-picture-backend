@@ -11,7 +11,7 @@ import com.katomegumi.zxpicturebackend.model.dao.entity.User;
 import com.katomegumi.zxpicturebackend.model.enums.SpaceRoleEnum;
 import com.katomegumi.zxpicturebackend.model.enums.SpaceTypeEnum;
 import com.katomegumi.zxpicturebackend.service.SpaceUserService;
-import com.katomegumi.zxpicturebackend.service.UserService;
+import com.katomegumi.zxpicturebackend.service.UserService1;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -29,7 +29,7 @@ public class SpaceUserAuthManager {
     public static final SpaceUserAuthConfig SPACE_USER_AUTH_CONFIG;
 
     @Resource
-    private UserService userService;
+    private UserService1 userService1;
 
     @Resource
     private SpaceUserService spaceUserService;
@@ -68,7 +68,7 @@ public class SpaceUserAuthManager {
         List<String> ADMIN_PERMISSIONS = getSpaceUserPermissionsByRole(SpaceRoleEnum.ADMIN.getValue());
         // 公共图库
         if (space == null) {
-            if (userService.isAdmin(loginUser)) {
+            if (userService1.isAdmin(loginUser)) {
                 return ADMIN_PERMISSIONS;
             }
             return new ArrayList<>();
@@ -81,7 +81,7 @@ public class SpaceUserAuthManager {
         switch (spaceTypeEnum) {
             case PRIVATE:
                 // 私有空间，仅本人或管理员有所有权限
-                if (space.getUserId().equals(loginUser.getId()) || userService.isAdmin(loginUser)) {
+                if (space.getUserId().equals(loginUser.getId()) || userService1.isAdmin(loginUser)) {
                     return ADMIN_PERMISSIONS;
                 } else {
                     return new ArrayList<>();

@@ -7,7 +7,7 @@ import com.katomegumi.zxpicturebackend.model.dao.entity.User;
 import com.katomegumi.zxpicturebackend.model.enums.SpaceTypeEnum;
 import com.katomegumi.zxpicturebackend.service.PictureService;
 import com.katomegumi.zxpicturebackend.service.SpaceService;
-import com.katomegumi.zxpicturebackend.service.UserService;
+import com.katomegumi.zxpicturebackend.service.UserService1;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -28,7 +28,7 @@ import java.util.Map;
 public class WsHandshakeInterceptor implements HandshakeInterceptor {
 
     @Resource
-    private UserService userService;
+    private UserService1 userService1;
     @Resource
     private PictureService pictureService;
     @Resource
@@ -50,7 +50,7 @@ public class WsHandshakeInterceptor implements HandshakeInterceptor {
                 return false;
             }
 
-            User loginUser = userService.getLoginUser(servletRequest);
+            User loginUser = userService1.getLoginUser(servletRequest);
             if (ObjectUtil.isEmpty(loginUser)){
                 log.error("用户未登录");
                 return false;

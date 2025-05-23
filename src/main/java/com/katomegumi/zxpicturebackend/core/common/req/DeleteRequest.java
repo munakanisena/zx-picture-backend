@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * @author Megumi
+ */
 @Data
 public class DeleteRequest implements Serializable {
 

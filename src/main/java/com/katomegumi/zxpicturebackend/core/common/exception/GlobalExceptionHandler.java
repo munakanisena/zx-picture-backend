@@ -5,11 +5,18 @@ import cn.dev33.satoken.exception.NotPermissionException;
 import com.katomegumi.zxpicturebackend.core.common.resp.BaseResponse;
 import com.katomegumi.zxpicturebackend.core.common.util.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.List;
+
 /**
  * 全局异常处理器 捕获BusinessException 和 RuntimeException
+ * @author lirui
  */
 @RestControllerAdvice
 @Slf4j
@@ -41,4 +48,11 @@ public class GlobalExceptionHandler {
         return ResultUtils.error(ErrorCode.NO_AUTH_ERROR, e.getMessage());
     }
 
+    // 处理 @Valid 注解校验失败异常
+    @Deprecated
+    @ExceptionHandler(BindException.class)
+    public BaseResponse<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.error("MethodArgumentNotValidException", e);
+        return ResultUtils.error(ErrorCode.PARAMS_ERROR);
+    }
 }

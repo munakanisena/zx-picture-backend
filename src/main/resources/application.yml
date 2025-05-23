@@ -81,11 +81,15 @@ spring:
     password: 123456
 
 mybatis-plus:
+  # mapper 文件位置
+  mapper-locations: classpath:/mapper/*.xml
+
   configuration:
-    # MyBatis 配置
-    map-underscore-to-camel-case: false
+    # MyBatis 配置 开启驼峰转下划线
+    map-underscore-to-camel-case: true
     #仅在开发环境打印日志
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
   global-config:
     enable-sql-runner: true
     db-config:
@@ -94,6 +98,11 @@ mybatis-plus:
       logic-delete-value: 1
       #默认 0 代表存在
       logic-not-delete-value: 0
+      #数据库字段下划线命名
+      table-underline: true
+
+    # 关闭 mybatis-plus 启动打印的 banner
+    banner: false
 
 --- #---------------------接口文档配置--------------------
 knife4j:
@@ -116,11 +125,13 @@ spring:
   mail:
     # 邮箱服务器地址
     host: smtp.qq.com
+    nickname: 惠眸图界
     #邮箱号
     username: xx@foxmail.com
     #授权码
     password: x
     port: 465
+    protocol: smtp
     #编码类型
     default-encoding: UTF-8
     properties:
@@ -128,8 +139,8 @@ spring:
         smtp:
           auth: true
           starttls:
-            enable: false
-            required: false
+            enable: true
+            required: true
           socketFactory:
             port: 465
             class: javax.net.ssl.SSLSocketFactory
@@ -150,7 +161,6 @@ aliYunAi:
   secret-key: x
 
 # 指定验证码内容
-img:
-  verify:
-    code:
-      content: 0123456789
+verify:
+  code:
+    length: 6

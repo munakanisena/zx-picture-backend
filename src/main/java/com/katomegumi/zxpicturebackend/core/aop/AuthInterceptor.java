@@ -1,32 +1,32 @@
 package com.katomegumi.zxpicturebackend.core.aop;
 
+import cn.hutool.json.JSONUtil;
 import com.katomegumi.zxpicturebackend.core.annotation.AuthCheck;
 import com.katomegumi.zxpicturebackend.core.common.exception.BusinessException;
 import com.katomegumi.zxpicturebackend.core.common.exception.ErrorCode;
-import com.katomegumi.zxpicturebackend.model.dao.entity.User;
+import com.katomegumi.zxpicturebackend.core.constant.UserConstant;
+import com.katomegumi.zxpicturebackend.manager.auth.StpKit.StpKit;
+import com.katomegumi.zxpicturebackend.model.dao.entity.UserInfo;
 import com.katomegumi.zxpicturebackend.model.enums.UserRoleEnum;
-import com.katomegumi.zxpicturebackend.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * 通过springboot-aop切面 加上注解 进行身份校验
+ * @author Megumi
  */
 @Component
 @Slf4j
 @Aspect
+@RequiredArgsConstructor
 public class AuthInterceptor {
-    @Resource
-    private UserService userService;
+
+    private final StringRedisTemplate stringRedisTemplate;
 
     /**
      * 进行权限效验
@@ -37,13 +37,17 @@ public class AuthInterceptor {
      */
     @Around("@annotation(authCheck)")
     public Object doInterceptor(ProceedingJoinPoint joinPoint,AuthCheck authCheck) throws Throwable {
-        String mustRole = authCheck.mustRole(); //获得注解属性
-        //获取request 用户信息
-        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
 
+        if (authCheck.mustLogin()){
+            if (!StpKit.USER.isLogin()){
+                throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR,"用户未登录");
+            };
+        }
+
+        String mustRole = authCheck.mustRole();
         //获取当前用户
-        User user = userService.getLoginUser(request);
+        String jsonStr = stringRedisTemplate.opsForValue().get(UserConstant.USER_LOGIN_STATE + StpKit.USER.getLoginIdAsLong());
+        UserInfo userInfo = JSONUtil.toBean(jsonStr, UserInfo.class);
 
         UserRoleEnum mustRoleEnum = UserRoleEnum.getUserRoleEnum(mustRole);
 
@@ -51,13 +55,9 @@ public class AuthInterceptor {
         if (mustRoleEnum==null){
             return joinPoint.proceed();
         }
-        //获取用户的枚举常量
-        UserRoleEnum userRoleEnum = UserRoleEnum.getUserRoleEnum(user.getUserRole());
 
-        //为空进行拦截
-        if (userRoleEnum==null){
-            throw new BusinessException(ErrorCode.NO_AUTH_ERROR,"需要登录");
-        }
+        //获取用户的枚举常量
+        UserRoleEnum userRoleEnum = UserRoleEnum.getUserRoleEnum(userInfo.getUserRole());
 
         // 要求必须有管理员权限，但用户没有管理员权限，拒绝
         if (UserRoleEnum.ADMIN.equals(mustRoleEnum) && !UserRoleEnum.ADMIN.equals(userRoleEnum)) {

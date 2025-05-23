@@ -18,7 +18,7 @@ import com.katomegumi.zxpicturebackend.model.vo.space.analyze.*;
 import com.katomegumi.zxpicturebackend.service.PictureService;
 import com.katomegumi.zxpicturebackend.service.SpaceAnalyzeService;
 import com.katomegumi.zxpicturebackend.service.SpaceService;
-import com.katomegumi.zxpicturebackend.service.UserService;
+import com.katomegumi.zxpicturebackend.service.UserService1;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -38,7 +38,7 @@ public class SpaceAnalyzeServiceImpl extends ServiceImpl<SpaceMapper, Space>
     @Resource
     private SpaceService spaceService;
     @Resource
-    private UserService userService;
+    private UserService1 userService1;
     @Resource
     private PictureService pictureService;
 
@@ -47,7 +47,7 @@ public class SpaceAnalyzeServiceImpl extends ServiceImpl<SpaceMapper, Space>
         ThrowUtils.throwIf(spaceUsageAnalyzeRequest==null,ErrorCode.PARAMS_ERROR);
         if (spaceUsageAnalyzeRequest.isQueryAll()||spaceUsageAnalyzeRequest.isQueryPublic()){
             //仅管理员可用
-            boolean isAdmin = userService.isAdmin(loginUser);
+            boolean isAdmin = userService1.isAdmin(loginUser);
             ThrowUtils.throwIf(!isAdmin, ErrorCode.NO_AUTH_ERROR, "无权访问空间");
             //校验权限
             checkSpaceAnalyzeAuth(spaceUsageAnalyzeRequest, loginUser);
@@ -231,7 +231,7 @@ public class SpaceAnalyzeServiceImpl extends ServiceImpl<SpaceMapper, Space>
         ThrowUtils.throwIf(spaceRankAnalyzeRequest == null, ErrorCode.PARAMS_ERROR);
 
         // 仅管理员可查看空间排行
-        ThrowUtils.throwIf(!userService.isAdmin(loginUser), ErrorCode.NO_AUTH_ERROR, "无权查看空间排行");
+        ThrowUtils.throwIf(!userService1.isAdmin(loginUser), ErrorCode.NO_AUTH_ERROR, "无权查看空间排行");
 
         // 构造查询条件
         QueryWrapper<Space> queryWrapper = new QueryWrapper<>();
@@ -253,7 +253,7 @@ public class SpaceAnalyzeServiceImpl extends ServiceImpl<SpaceMapper, Space>
         boolean queryPublic = spaceAnalyzeRequest.isQueryPublic();
         boolean queryAll = spaceAnalyzeRequest.isQueryAll();
         if (queryAll||queryPublic) {
-            ThrowUtils.throwIf(!userService.isAdmin(loginUser),ErrorCode.NO_AUTH_ERROR);
+            ThrowUtils.throwIf(!userService1.isAdmin(loginUser),ErrorCode.NO_AUTH_ERROR);
             return;
         }
         Long spaceId = spaceAnalyzeRequest.getSpaceId();

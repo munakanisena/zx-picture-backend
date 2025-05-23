@@ -11,10 +11,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author Megumi
+ * Cos客户端配置
+ */
 @Configuration
 @Data
-@ConfigurationProperties(prefix = "cos.client") //在配置文件 配置对象
+@ConfigurationProperties(prefix = "cos.client")
 public class CosClientConfig {
+
     /**
      * 域名
      */

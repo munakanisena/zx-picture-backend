@@ -1,28 +1,31 @@
 -- 创建数据库
-create database if not exists zx_picture;
+CREATE DATABASE IF NOT EXISTS zx_picture CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- 切换库
-use zx_picture;
+USE zx_picture;
 
 -- 创建表  tab+shift 全局退格
-create table if not exists tb_user(
-  id  bigint auto_increment comment 'id' primary key,
-  userAccount  varchar(256)                           not null comment '账号',
-  userPassword varchar(512)                           not null comment '密码',
-  userName     varchar(256)                           null comment '用户昵称',
-  userAvatar   varchar(1024)                          null comment '用户头像',
-  userProfile  varchar(512)                           null comment '用户简介',
-  userRole     varchar(256) default 'user'            not null comment '用户角色：user/admin',
+CREATE TABLE IF NOT EXISTS tb_user
+(
+  id           BIGINT UNSIGNED AUTO_INCREMENT NOT NULL comment 'id',
+  userAccount  varchar(256)                           not null COMMENT '账号',
+  userPassword varchar(512)                           not null COMMENT '密码',
+  userName     varchar(256)                           null COMMENT '用户昵称',
+  userAvatar   varchar(1024)                          null COMMENT '用户头像',
+  userProfile  varchar(512)                           null COMMENT '用户简介',
+  userRole     varchar(256) default 'user'            not null COMMENT '用户角色：user/admin',
   editTime     datetime     default CURRENT_TIMESTAMP not null comment '编辑时间',
   createTime   datetime     default CURRENT_TIMESTAMP not null comment '创建时间',
   updateTime   datetime     default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
   isDelete     tinyint      default 0                 not null comment '是否删除',
+
+  PRIMARY KEY (id),
   UNIQUE KEY uk_userAccount (userAccount),
   INDEX idx_userName (userName)
-) comment '用户' collate = utf8mb4_unicode_ci;
+) COMMENT '用户' collate = utf8mb4_unicode_ci;
 
 -- 图片表
-create table if not exists tb_picture
+CREATE TABLE IF NOT EXISTS tb_picture
 (
     id           bigint auto_increment comment 'id' primary key,
     url          varchar(512)                       not null comment '图片 url',
@@ -63,7 +66,7 @@ alter table tb_picture
     add column thumbnailUrl varchar(512)   NULL comment '缩略图 url';
 
 -- 空间表
-create table if not exists tb_space
+CREATE TABLE IF NOT EXISTS tb_space
 (
     id         bigint auto_increment comment 'id' primary key,
     spaceName  varchar(128)                       null comment '空间名称',
@@ -101,7 +104,8 @@ ALTER TABLE tb_space
 CREATE INDEX idx_spaceType on tb_space(spaceType);
 
 -- 团队空间用户表
-create table if not exists tb_space_user(
+CREATE TABLE IF NOT EXISTS tb_space_user
+(
     id              bigint          auto_increment          comment 'id' primary key ,
     spaceId         bigint          not null                comment '空间Id',
     userId          bigint          not null                comment '用户id',

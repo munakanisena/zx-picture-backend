@@ -24,7 +24,7 @@ import com.katomegumi.zxpicturebackend.model.enums.SpaceTypeEnum;
 import com.katomegumi.zxpicturebackend.service.PictureService;
 import com.katomegumi.zxpicturebackend.service.SpaceService;
 import com.katomegumi.zxpicturebackend.service.SpaceUserService;
-import com.katomegumi.zxpicturebackend.service.UserService;
+import com.katomegumi.zxpicturebackend.service.UserService1;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -61,7 +61,7 @@ public class StpInterfaceImpl implements StpInterface {
     private PictureService pictureService;
 
     @Resource
-    private UserService userService;
+    private UserService1 userService1;
 
     /**
      * 返回一个账号所拥有的权限码集合 
@@ -128,7 +128,7 @@ public class StpInterfaceImpl implements StpInterface {
             spaceId = picture.getSpaceId();
             // 公共图库，仅本人或管理员可操作
             if (spaceId == null) {
-                if (picture.getUserId().equals(userId) || userService.isAdmin(loginUser)) {
+                if (picture.getUserId().equals(userId) || userService1.isAdmin(loginUser)) {
                     return ADMIN_PERMISSIONS;
                 } else {
                     // 不是自己的图片，仅可查看
@@ -144,7 +144,7 @@ public class StpInterfaceImpl implements StpInterface {
         // 根据 Space 类型判断权限
         if (space.getSpaceType() == SpaceTypeEnum.PRIVATE.getValue()) {
             // 私有空间，仅本人或管理员有权限
-            if (space.getUserId().equals(userId) || userService.isAdmin(loginUser)) {
+            if (space.getUserId().equals(userId) || userService1.isAdmin(loginUser)) {
                 return ADMIN_PERMISSIONS;
             } else {
                 return new ArrayList<>();

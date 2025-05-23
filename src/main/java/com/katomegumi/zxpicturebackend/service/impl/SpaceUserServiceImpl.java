@@ -16,11 +16,11 @@ import com.katomegumi.zxpicturebackend.model.dao.entity.User;
 import com.katomegumi.zxpicturebackend.model.enums.SpaceRoleEnum;
 import com.katomegumi.zxpicturebackend.model.vo.SpaceUserVO;
 import com.katomegumi.zxpicturebackend.model.vo.SpaceVO;
-import com.katomegumi.zxpicturebackend.model.vo.UserVO;
+import com.katomegumi.zxpicturebackend.model.vo.user.UserDetailVO;
 import com.katomegumi.zxpicturebackend.service.SpaceService;
 import com.katomegumi.zxpicturebackend.service.SpaceUserService;
 import com.katomegumi.zxpicturebackend.model.dao.mapper.SpaceUserMapper;
-import com.katomegumi.zxpicturebackend.service.UserService;
+import com.katomegumi.zxpicturebackend.service.UserService1;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,7 @@ public class SpaceUserServiceImpl extends ServiceImpl<SpaceUserMapper, SpaceUser
     implements SpaceUserService{
 
     @Resource
-    private UserService userService;
+    private UserService1 userService1;
 
     @Resource
     @Lazy
@@ -87,9 +87,9 @@ public class SpaceUserServiceImpl extends ServiceImpl<SpaceUserMapper, SpaceUser
         // 关联查询用户信息
         Long userId = spaceUser.getUserId();
         if (userId != null && userId > 0) {
-            User user = userService.getById(userId);
-            UserVO userVO = userService.getUserVO(user);
-            spaceUserVO.setUser(userVO);
+            User user = userService1.getById(userId);
+            UserDetailVO userDetailVO = userService1.getUserVO(user);
+            spaceUserVO.setUser(userDetailVO);
         }
         // 关联查询空间信息
         Long spaceId = spaceUser.getSpaceId();
@@ -113,7 +113,7 @@ public class SpaceUserServiceImpl extends ServiceImpl<SpaceUserMapper, SpaceUser
         Set<Long> userIdSet = spaceUserList.stream().map(SpaceUser::getUserId).collect(Collectors.toSet());
         Set<Long> spaceIdSet = spaceUserList.stream().map(SpaceUser::getSpaceId).collect(Collectors.toSet());
         // 2. 批量查询用户和空间
-        Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
+        Map<Long, List<User>> userIdUserListMap = userService1.listByIds(userIdSet).stream()
                 .collect(Collectors.groupingBy(User::getId));
         Map<Long, List<Space>> spaceIdSpaceListMap = spaceService.listByIds(spaceIdSet).stream()
                 .collect(Collectors.groupingBy(Space::getId));
@@ -126,7 +126,7 @@ public class SpaceUserServiceImpl extends ServiceImpl<SpaceUserMapper, SpaceUser
             if (userIdUserListMap.containsKey(userId)) {
                 user = userIdUserListMap.get(userId).get(0);
             }
-            spaceUserVO.setUser(userService.getUserVO(user));
+            spaceUserVO.setUser(userService1.getUserVO(user));
             // 填充空间信息
             Space space = null;
             if (spaceIdSpaceListMap.containsKey(spaceId)) {
@@ -145,7 +145,7 @@ public class SpaceUserServiceImpl extends ServiceImpl<SpaceUserMapper, SpaceUser
         Long userId = spaceUser.getUserId();
         if (add) {
             ThrowUtils.throwIf(ObjectUtil.hasEmpty(spaceId, userId), ErrorCode.PARAMS_ERROR);
-            User user = userService.getById(userId);
+            User user = userService1.getById(userId);
             ThrowUtils.throwIf(user == null, ErrorCode.NOT_FOUND_ERROR, "用户不存在");
             Space space = spaceService.getById(spaceId);
             ThrowUtils.throwIf(space == null, ErrorCode.NOT_FOUND_ERROR, "空间不存在");

@@ -7,6 +7,7 @@ import com.katomegumi.zxpicturebackend.core.common.util.ResultUtils;
 import com.katomegumi.zxpicturebackend.core.common.exception.BusinessException;
 import com.katomegumi.zxpicturebackend.core.common.exception.ErrorCode;
 import com.katomegumi.zxpicturebackend.core.common.exception.ThrowUtils;
+import com.katomegumi.zxpicturebackend.core.constant.ApiRouterConstant;
 import com.katomegumi.zxpicturebackend.manager.auth.annotation.SaSpaceCheckPermission;
 import com.katomegumi.zxpicturebackend.manager.auth.model.SpaceUserPermissionConstant;
 import com.katomegumi.zxpicturebackend.model.dto.spaceuser.SpaceUserAddRequest;
@@ -16,7 +17,7 @@ import com.katomegumi.zxpicturebackend.model.dao.entity.SpaceUser;
 import com.katomegumi.zxpicturebackend.model.dao.entity.User;
 import com.katomegumi.zxpicturebackend.model.vo.SpaceUserVO;
 import com.katomegumi.zxpicturebackend.service.SpaceUserService;
-import com.katomegumi.zxpicturebackend.service.UserService;
+import com.katomegumi.zxpicturebackend.service.UserService1;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/spaceUser")
+@RequestMapping(ApiRouterConstant.API_SPACE_USER_URL_PREFIX)
 @Slf4j
 public class SpaceUserController {
 
@@ -37,7 +38,7 @@ public class SpaceUserController {
     private SpaceUserService spaceUserService;
 
     @Resource
-    private UserService userService;
+    private UserService1 userService1;
 
     /**
      * 添加成员到空间
@@ -131,7 +132,7 @@ public class SpaceUserController {
      */
     @PostMapping("/list/my")
     public BaseResponse<List<SpaceUserVO>> listMyTeamSpace(HttpServletRequest request) {
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userService1.getLoginUser(request);
         SpaceUserQueryRequest spaceUserQueryRequest = new SpaceUserQueryRequest();
         spaceUserQueryRequest.setUserId(loginUser.getId());
         List<SpaceUser> spaceUserList = spaceUserService.list(

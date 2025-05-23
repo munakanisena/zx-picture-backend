@@ -29,6 +29,7 @@ public class FileController {
 
     @Resource
     private CosManager cosManager;
+
     @Autowired
     private View error;
 

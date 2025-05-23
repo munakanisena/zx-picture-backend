@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.katomegumi.zxpicturebackend.model.dao.mapper.UserInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.katomegumi.zxpicturebackend.model.dao.entity.UserInfo">
+            <id property="id" column="id" />
+            <result property="user_account" column="user_account" />
+            <result property="user_password" column="user_password" />
+            <result property="user_email" column="user_email" />
+            <result property="user_phone" column="user_phone" />
+            <result property="nick_name" column="nick_name" />
+            <result property="user_avatar" column="user_avatar" />
+            <result property="user_sex" column="user_sex" />
+            <result property="user_profile" column="user_profile" />
+            <result property="birthday" column="birthday" />
+            <result property="vip_number" column="vip_number" />
+            <result property="user_role" column="user_role" />
+            <result property="is_vip" column="is_vip" />
+            <result property="is_disabled" column="is_disabled" />
+            <result property="is_delete" column="is_delete" />
+            <result property="edit_time" column="edit_time" />
+            <result property="create_time" column="create_time" />
+            <result property="update_time" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_account,user_password,user_email,user_phone,nick_name,
+        user_avatar,user_sex,user_profile,birthday,vip_number,
+        user_role,is_vip,is_disabled,is_delete,edit_time,
+        create_time,update_time
+    </sql>
+</mapper>

@@ -1,6 +1,7 @@
 package com.katomegumi.zxpicturebackend.model.vo;
 
 import com.katomegumi.zxpicturebackend.model.dao.entity.SpaceUser;
+import com.katomegumi.zxpicturebackend.model.vo.user.UserDetailVO;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
@@ -43,7 +44,7 @@ public class SpaceUserVO implements Serializable {
     /**
      * 用户信息
      */
-    private UserVO user;
+    private UserDetailVO user;
 
     /**
      * 空间信息

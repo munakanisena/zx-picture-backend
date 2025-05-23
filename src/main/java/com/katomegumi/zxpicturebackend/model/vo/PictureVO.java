@@ -2,6 +2,7 @@ package com.katomegumi.zxpicturebackend.model.vo;
 
 import cn.hutool.json.JSONUtil;
 import com.katomegumi.zxpicturebackend.model.dao.entity.Picture;
+import com.katomegumi.zxpicturebackend.model.vo.user.UserDetailVO;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
@@ -106,7 +107,7 @@ public class PictureVO implements Serializable {
     /**
      * 创建用户信息
      */
-    private UserVO user;
+    private UserDetailVO user;
 
     /**
      * 缩略图URL

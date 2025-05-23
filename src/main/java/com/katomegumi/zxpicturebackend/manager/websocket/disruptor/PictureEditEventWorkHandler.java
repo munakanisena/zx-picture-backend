@@ -6,7 +6,7 @@ import com.katomegumi.zxpicturebackend.manager.websocket.model.PictureEditMessag
 import com.katomegumi.zxpicturebackend.manager.websocket.model.PictureEditRequestMessage;
 import com.katomegumi.zxpicturebackend.manager.websocket.model.PictureEditResponseMessage;
 import com.katomegumi.zxpicturebackend.model.dao.entity.User;
-import com.katomegumi.zxpicturebackend.service.UserService;
+import com.katomegumi.zxpicturebackend.service.UserService1;
 import com.lmax.disruptor.WorkHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
@@ -28,7 +28,7 @@ public class PictureEditEventWorkHandler implements WorkHandler<PictureEditEvent
     private PictureEditHandler pictureEditHandler;
 
     @Resource
-    private UserService userService;
+    private UserService1 userService1;
 
     @Override
     public void onEvent(PictureEditEvent event) throws Exception {
@@ -54,7 +54,7 @@ public class PictureEditEventWorkHandler implements WorkHandler<PictureEditEvent
                 PictureEditResponseMessage pictureEditResponseMessage = new PictureEditResponseMessage();
                 pictureEditResponseMessage.setType(PictureEditMessageTypeEnum.ERROR.getValue());
                 pictureEditResponseMessage.setMessage("消息类型错误");
-                pictureEditResponseMessage.setUser(userService.getUserVO(user));
+                pictureEditResponseMessage.setUser(userService1.getUserVO(user));
                 session.sendMessage(new TextMessage(JSONUtil.toJsonStr(pictureEditResponseMessage)));
         }
     }

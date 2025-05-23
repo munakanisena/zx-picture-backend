@@ -8,6 +8,7 @@ import com.katomegumi.zxpicturebackend.core.annotation.AuthCheck;
 import com.katomegumi.zxpicturebackend.core.common.resp.BaseResponse;
 import com.katomegumi.zxpicturebackend.core.common.req.DeleteRequest;
 import com.katomegumi.zxpicturebackend.core.common.util.ResultUtils;
+import com.katomegumi.zxpicturebackend.core.constant.ApiRouterConstant;
 import com.katomegumi.zxpicturebackend.core.constant.UserConstant;
 import com.katomegumi.zxpicturebackend.core.common.exception.BusinessException;
 import com.katomegumi.zxpicturebackend.core.common.exception.ErrorCode;
@@ -19,7 +20,7 @@ import com.katomegumi.zxpicturebackend.model.dao.entity.User;
 import com.katomegumi.zxpicturebackend.model.enums.SpaceLevelEnum;
 import com.katomegumi.zxpicturebackend.model.vo.SpaceVO;
 import com.katomegumi.zxpicturebackend.service.SpaceService;
-import com.katomegumi.zxpicturebackend.service.UserService;
+import com.katomegumi.zxpicturebackend.service.UserService1;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 
@@ -36,13 +37,13 @@ import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
-@RequestMapping("/space")
+@RequestMapping(ApiRouterConstant.API_SPACE_URL_PREFIX)
 public class SpaceController {
     @Resource
     private SpaceService spaceService;
 
     @Resource
-    private UserService userService;
+    private UserService1 userService1;
 
     @Resource
     private SpaceUserAuthManager   spaceUserAuthManager;
@@ -50,7 +51,7 @@ public class SpaceController {
     @PostMapping("/add")
     public BaseResponse<Long> addSpace(@RequestBody SpaceAddRequest spaceAddRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(spaceAddRequest==null, ErrorCode.PARAMS_ERROR);
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userService1.getLoginUser(request);
         long newSpaceId = spaceService.addSpace(spaceAddRequest, loginUser);
         return ResultUtils.success(newSpaceId);
     }
@@ -90,7 +91,7 @@ public class SpaceController {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userService1.getLoginUser(request);
         long id = deleteRequest.getId();
         // 判断是否存在
         Space oldSpace = spaceService.getById(id);
@@ -128,7 +129,7 @@ public class SpaceController {
         Space space = spaceService.getById(id);
         ThrowUtils.throwIf(space == null, ErrorCode.NOT_FOUND_ERROR);
         SpaceVO spaceVO = spaceService.getSpaceVO(space, request);
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userService1.getLoginUser(request);
         List<String> permissionList = spaceUserAuthManager.getPermissionList(space, loginUser);
         spaceVO.setPermissionList(permissionList);
         // 获取封装类
@@ -182,7 +183,7 @@ public class SpaceController {
         space.setEditTime(new Date());
         // 数据校验
         spaceService.validSpace(space,false);
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userService1.getLoginUser(request);
         // 判断是否存在
         long id = SpaceEditRequest.getId();
         Space oldSpace = spaceService.getById(id);

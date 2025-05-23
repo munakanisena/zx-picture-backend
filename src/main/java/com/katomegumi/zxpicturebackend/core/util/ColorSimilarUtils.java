@@ -1,17 +1,15 @@
 package com.katomegumi.zxpicturebackend.core.util;
 
+import lombok.experimental.UtilityClass;
+
 import java.awt.*;
 
 /**
  * 工具类 计算图片相似度
+ * @author Megumi
  */
+@UtilityClass
 public class ColorSimilarUtils {
-    /**
-     * 工具无需实例化 设置为私有
-     */
-    private ColorSimilarUtils() {
-
-    }
     /**
      * 计算两个颜色的相似度(基于RGB 红色 绿色 蓝色 )
      *

@@ -15,6 +15,7 @@ import com.katomegumi.zxpicturebackend.core.api.imagesearch.model.ImageSearchRes
 import com.katomegumi.zxpicturebackend.core.common.resp.BaseResponse;
 import com.katomegumi.zxpicturebackend.core.common.req.DeleteRequest;
 import com.katomegumi.zxpicturebackend.core.common.util.ResultUtils;
+import com.katomegumi.zxpicturebackend.core.constant.ApiRouterConstant;
 import com.katomegumi.zxpicturebackend.core.constant.UserConstant;
 import com.katomegumi.zxpicturebackend.core.common.exception.BusinessException;
 import com.katomegumi.zxpicturebackend.core.common.exception.ErrorCode;
@@ -32,7 +33,7 @@ import com.katomegumi.zxpicturebackend.model.vo.PictureTagCategory;
 import com.katomegumi.zxpicturebackend.model.vo.PictureVO;
 import com.katomegumi.zxpicturebackend.service.PictureService;
 import com.katomegumi.zxpicturebackend.service.SpaceService;
-import com.katomegumi.zxpicturebackend.service.UserService;
+import com.katomegumi.zxpicturebackend.service.UserService1;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -48,12 +49,12 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/picture")
+@RequestMapping(ApiRouterConstant.API_PICTURE_URL_PREFIX)
 public class PictureController {
     @Resource
     private PictureService pictureService;
     @Resource
-    private UserService userService;
+    private UserService1 userService1;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
     @Resource
@@ -83,10 +84,11 @@ public class PictureController {
             @RequestPart("file") MultipartFile multipartFile,
             PictureUploadRequest pictureUploadRequest,
             HttpServletRequest request) {
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userService1.getLoginUser(request);
         PictureVO pictureVO = pictureService.uploadPicture(multipartFile, pictureUploadRequest, loginUser);
         return ResultUtils.success(pictureVO);
     }
+
     /**
      * 根据URL上传图片（可重新上传）
      */
@@ -96,7 +98,7 @@ public class PictureController {
     public BaseResponse<PictureVO> uploadPictureByUrl(
             @RequestBody  PictureUploadRequest pictureUploadRequest,
             HttpServletRequest request) {
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userService1.getLoginUser(request);
         String fileUrl = pictureUploadRequest.getFileUrl();
         PictureVO pictureVO = pictureService.uploadPicture(fileUrl, pictureUploadRequest, loginUser);
         return ResultUtils.success(pictureVO);
@@ -114,7 +116,7 @@ public class PictureController {
             @RequestBody PictureUploadByBatchRequest pictureUploadByBatchRequest,
             HttpServletRequest request){
         ThrowUtils.throwIf(pictureUploadByBatchRequest==null,ErrorCode.PARAMS_ERROR);
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userService1.getLoginUser(request);
         return ResultUtils.success(pictureService.uploadPictureByBatch(pictureUploadByBatchRequest,loginUser));
     }
 
@@ -127,7 +129,7 @@ public class PictureController {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userService1.getLoginUser(request);
         long id = deleteRequest.getId();
         pictureService.deletePicture(id, loginUser);
         return ResultUtils.success(true);
@@ -154,7 +156,7 @@ public class PictureController {
         long id = pictureUpdateRequest.getId();
         Picture oldPicture = pictureService.getById(id);
         ThrowUtils.throwIf(oldPicture == null, ErrorCode.NOT_FOUND_ERROR);
-        User loginuser = userService.getLoginUser(request);
+        User loginuser = userService1.getLoginUser(request);
         pictureService.fillReviewParams(picture, loginuser);
 
         // 操作数据库
@@ -196,7 +198,7 @@ public class PictureController {
             ThrowUtils.throwIf(space == null, ErrorCode.NOT_FOUND_ERROR, "空间不存在");
         }
         //获取权限列表传给前段 前端基于这个列表展示页面
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userService1.getLoginUser(request);
         List<String> permissionList = spaceUserAuthManager.getPermissionList(space, loginUser);
         PictureVO pictureVO = pictureService.getPictureVO(picture, request);
         pictureVO.setPermissionList(permissionList);
@@ -308,7 +310,7 @@ public class PictureController {
         if (pictureEditRequest == null || pictureEditRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userService1.getLoginUser(request);
         pictureService.editPicture(pictureEditRequest,loginUser);
         return ResultUtils.success(true);
     }
@@ -334,7 +336,7 @@ public class PictureController {
     public BaseResponse<Boolean> doPictureReview(@RequestBody PictureReviewRequest pictureReviewRequest,
                                                  HttpServletRequest request) {
         ThrowUtils.throwIf(pictureReviewRequest==null,ErrorCode.PARAMS_ERROR);
-        User user = userService.getLoginUser(request);
+        User user = userService1.getLoginUser(request);
         ThrowUtils.throwIf(user == null, ErrorCode.NOT_FOUND_ERROR);
         pictureService.doPictureReview(pictureReviewRequest, user);
         return ResultUtils.success(true);
@@ -352,7 +354,7 @@ public class PictureController {
             @RequestBody SearchPictureByColorRequest searchPictureByColorRequest,
             HttpServletRequest request) {
         ThrowUtils.throwIf(searchPictureByColorRequest==null, ErrorCode.PARAMS_ERROR);
-        User user = userService.getLoginUser(request);
+        User user = userService1.getLoginUser(request);
         ThrowUtils.throwIf(user == null, ErrorCode.NOT_FOUND_ERROR);
         Long spaceId = searchPictureByColorRequest.getSpaceId();
         String picColor = searchPictureByColorRequest.getPicColor();
@@ -370,7 +372,7 @@ public class PictureController {
     @SaSpaceCheckPermission(value = SpaceUserPermissionConstant.PICTURE_EDIT)
     public BaseResponse<Boolean> editPictureByBatch(@RequestBody PictureEditByBatchRequest pictureEditByBatchRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(pictureEditByBatchRequest == null, ErrorCode.PARAMS_ERROR);
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userService1.getLoginUser(request);
         pictureService.editPictureByBatch(pictureEditByBatchRequest, loginUser);
         return ResultUtils.success(true);
     }
@@ -385,7 +387,7 @@ public class PictureController {
         if (createPictureOutPaintingTaskRequest == null || createPictureOutPaintingTaskRequest.getPictureId() == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userService1.getLoginUser(request);
         CreateOutPaintingTaskResponse response = pictureService.createPictureOutPaintingTask(createPictureOutPaintingTaskRequest, loginUser);
         return ResultUtils.success(response);
     }

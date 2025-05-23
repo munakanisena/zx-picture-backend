@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 /**
  * 注册用户 dto
+ * @author katoMegumi
  */
 @Data
 public class UserRegisterRequest implements Serializable {
@@ -16,12 +17,22 @@ public class UserRegisterRequest implements Serializable {
     /**
      * 用户名
      */
-    private String userAccount;
+    private String username;
+
+    /**
+     * 用户邮箱
+     */
+    private String userEmail;
+
+    /*
+     * 邮箱验证码
+     */
+    private String captcha;
 
     /**
      * 密码
      */
-    private String userPassword;
+    private String password;
 
     /**
      * 确认密码

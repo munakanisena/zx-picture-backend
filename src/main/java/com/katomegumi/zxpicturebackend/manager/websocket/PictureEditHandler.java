@@ -12,7 +12,7 @@ import com.katomegumi.zxpicturebackend.manager.websocket.model.PictureEditMessag
 import com.katomegumi.zxpicturebackend.manager.websocket.model.PictureEditRequestMessage;
 import com.katomegumi.zxpicturebackend.manager.websocket.model.PictureEditResponseMessage;
 import com.katomegumi.zxpicturebackend.model.dao.entity.User;
-import com.katomegumi.zxpicturebackend.model.vo.UserVO;
+import com.katomegumi.zxpicturebackend.model.vo.user.UserDetailVO;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -50,9 +50,9 @@ public class PictureEditHandler extends TextWebSocketHandler {
         pictureSessions.get(pictureId).add(session);
         //构造响应
         PictureEditResponseMessage pictureEditResponseMessage = new PictureEditResponseMessage();
-        UserVO userVo = BeanUtil.toBean(user, UserVO.class);
+        UserDetailVO userDetailVo = BeanUtil.toBean(user, UserDetailVO.class);
         String message=String.format("%s用户加入了编辑",user.getUserName());
-        pictureEditResponseMessage.setUser(userVo);
+        pictureEditResponseMessage.setUser(userDetailVo);
         pictureEditResponseMessage.setType(PictureEditMessageTypeEnum.INFO.getValue());
         broadcastToPicture(pictureId, pictureEditResponseMessage);
     }
@@ -89,7 +89,7 @@ public class PictureEditHandler extends TextWebSocketHandler {
 //            default:
 //                PictureEditResponseMessage pictureEditResponseMessage = new PictureEditResponseMessage();
 //                pictureEditResponseMessage.setMessage("消息类型错误");
-//                pictureEditResponseMessage.setUser(BeanUtil.toBean(user, UserVO.class));
+//                pictureEditResponseMessage.setUser(BeanUtil.toBean(user, UserDetailVO.class));
 //                pictureEditResponseMessage.setType(PictureEditMessageTypeEnum.ERROR.getValue());
 //                session.sendMessage(new TextMessage(JSONUtil.toJsonStr(pictureEditResponseMessage)));
 //        }
@@ -114,7 +114,7 @@ public class PictureEditHandler extends TextWebSocketHandler {
         pictureEditResponseMessage.setType(PictureEditMessageTypeEnum.INFO.getValue());
         String message = String.format("%s离开编辑", user.getUserName());
         pictureEditResponseMessage.setMessage(message);
-        pictureEditResponseMessage.setUser(BeanUtil.toBean(user, UserVO.class));
+        pictureEditResponseMessage.setUser(BeanUtil.toBean(user, UserDetailVO.class));
         broadcastToPicture(pictureId, pictureEditResponseMessage);
 
     }
@@ -127,7 +127,7 @@ public class PictureEditHandler extends TextWebSocketHandler {
         pictureEditingUsers.put(pictureId,user.getId());
         //构造响应体
         PictureEditResponseMessage pictureEditResponseMessage = new PictureEditResponseMessage();
-        pictureEditResponseMessage.setUser(BeanUtil.toBean(user, UserVO.class));
+        pictureEditResponseMessage.setUser(BeanUtil.toBean(user, UserDetailVO.class));
         pictureEditResponseMessage.setType(PictureEditMessageTypeEnum.EDIT_ACTION.getValue());
         String message=String.format("%s用户开始编辑",user.getUserName());
         pictureEditResponseMessage.setMessage(message);
@@ -145,7 +145,7 @@ public class PictureEditHandler extends TextWebSocketHandler {
         //如果一致才允许编辑
         if (pictureEditingUsers.get(pictureId).equals(user.getId())&&pictureEditingUsers.get(pictureId)!=null) {
             PictureEditResponseMessage pictureEditResponseMessage = new PictureEditResponseMessage();
-            pictureEditResponseMessage.setUser(BeanUtil.toBean(user, UserVO.class));
+            pictureEditResponseMessage.setUser(BeanUtil.toBean(user, UserDetailVO.class));
             pictureEditResponseMessage.setType(PictureEditMessageTypeEnum.EDIT_ACTION.getValue());
             String message=String.format("%s用户执行%s",user.getUserName(),pictureEditActionEnum.getText());
             pictureEditResponseMessage.setMessage(message);
@@ -161,7 +161,7 @@ public class PictureEditHandler extends TextWebSocketHandler {
             //移除用户当前编辑状态
             pictureEditingUsers.remove(pictureId);
             PictureEditResponseMessage pictureEditResponseMessage = new PictureEditResponseMessage();
-            pictureEditResponseMessage.setUser(BeanUtil.toBean(user, UserVO.class));
+            pictureEditResponseMessage.setUser(BeanUtil.toBean(user, UserDetailVO.class));
             pictureEditResponseMessage.setType(PictureEditMessageTypeEnum.EXIT_EDIT.getValue());
             String message=String.format("%s用户退出编辑",user.getUserName());
             pictureEditResponseMessage.setMessage(message);
