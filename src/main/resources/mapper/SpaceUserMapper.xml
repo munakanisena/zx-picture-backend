@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.katomegumi.zxpicturebackend.model.dao.mapper.SpaceUserMapper">
+
+    <resultMap id="BaseResultMap" type="com.katomegumi.zxpicturebackend.model.dao.entity.SpaceUser">
+            <id property="id" column="id" />
+            <result property="spaceId" column="space_id" />
+            <result property="userId" column="user_id" />
+            <result property="spaceRole" column="space_role" />
+            <result property="isDelete" column="is_delete" />
+            <result property="editTime" column="edit_time" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,space_id,user_id,space_role,is_delete,edit_time,
+        create_time,update_time
+    </sql>
+</mapper>

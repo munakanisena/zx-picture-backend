@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.katomegumi.zxpicturebackend.model.dao.mapper.SpaceInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.katomegumi.zxpicturebackend.model.dao.entity.SpaceInfo">
+            <id property="id" column="id" />
+            <result property="userId" column="user_id" />
+            <result property="spaceName" column="space_name" />
+            <result property="spaceType" column="space_type" />
+            <result property="spaceLevel" column="space_level" />
+            <result property="maxSize" column="max_size" />
+            <result property="maxCount" column="max_count" />
+            <result property="usedSize" column="used_size" />
+            <result property="usedCount" column="used_count" />
+            <result property="isDelete" column="is_delete" />
+            <result property="editTime" column="edit_time" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,space_name,space_type,space_level,max_size,
+        max_count,used_size,used_count,is_delete,edit_time,
+        create_time,update_time
+    </sql>
+</mapper>
