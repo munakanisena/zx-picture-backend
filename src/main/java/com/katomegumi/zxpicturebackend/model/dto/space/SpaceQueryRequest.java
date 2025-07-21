@@ -13,8 +13,10 @@ import java.io.Serializable;
 @Data
 public class SpaceQueryRequest extends PageRequest implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     /**
-     * id
+     * 空间id
      */
     private Long id;
 
@@ -37,6 +39,4 @@ public class SpaceQueryRequest extends PageRequest implements Serializable {
      * 空间类型：0-私有 1-团队
      */
     private Integer spaceType;
-
-    private static final long serialVersionUID = 1L;
 }

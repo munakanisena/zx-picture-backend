@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author Megumi
+ * @description 图片编辑响应消息
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,7 +30,7 @@ public class PictureEditResponseMessage {
     private String editAction;
 
     /**
-     * 用户信息
+     * 当前编辑请求的用户信息
      */
-    private UserDetailVO user;
+    private UserDetailVO userDetailVO;
 }

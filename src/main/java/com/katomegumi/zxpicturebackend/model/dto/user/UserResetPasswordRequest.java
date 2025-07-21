@@ -16,7 +16,8 @@ public class UserResetPasswordRequest implements Serializable {
     /**
      * 用户邮箱
      */
-    private String userEmail;
+    private String email;
+
     /**
      * 邮件验证码
      */
@@ -26,6 +27,7 @@ public class UserResetPasswordRequest implements Serializable {
      * 新密码
      */
     private String newPassword;
+
     /**
      * 确认密码
      */

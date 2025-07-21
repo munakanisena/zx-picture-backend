@@ -1,16 +1,18 @@
 package com.katomegumi.zxpicturebackend.model.vo.space.analyze;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * @author Megumi
+ */
 @Data
+@Builder
 public class SpaceUsageAnalyzeResponse implements Serializable {
 
-    /**
-     * 已使用大小
-     */
-    private Long usedSize;
+    private static final long serialVersionUID = 1L;
 
     /**
      * 总大小
@@ -18,14 +20,9 @@ public class SpaceUsageAnalyzeResponse implements Serializable {
     private Long maxSize;
 
     /**
-     * 空间使用比例
+     * 已使用大小
      */
-    private Double sizeUsageRatio;
-
-    /**
-     * 当前图片数量
-     */
-    private Long usedCount;
+    private Long usedSize;
 
     /**
      * 最大图片数量
@@ -33,9 +30,18 @@ public class SpaceUsageAnalyzeResponse implements Serializable {
     private Long maxCount;
 
     /**
+     * 当前图片数量
+     */
+    private Long usedCount;
+
+    /**
      * 图片数量占比
      */
     private Double countUsageRatio;
 
-    private static final long serialVersionUID = 1L;
+    /**
+     * 空间使用比例
+     */
+    private Double sizeUsageRatio;
+
 }

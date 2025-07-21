@@ -1,7 +1,6 @@
 package com.katomegumi.zxpicturebackend.core.config;
 
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -12,7 +11,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 @JsonComponent
 public class JsonConfig {
     /**
-     * 添加 Long 转 json 精度丢失的配置  将Long类型转为String类型进行返回 解决精度丢失
+     * Long 精度丢失问题  将Long类型转为String类型进行返回 解决精度丢失
      */
     @Bean
     public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
@@ -20,6 +19,8 @@ public class JsonConfig {
         SimpleModule module = new SimpleModule();
         module.addSerializer(Long.class, ToStringSerializer.instance);
         module.addSerializer(Long.TYPE, ToStringSerializer.instance);
+        // 设置命名策略为 SNAKE_CASE（下划线）
+//        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
         objectMapper.registerModule(module);
         return objectMapper;
     }

@@ -1,16 +1,16 @@
 package com.katomegumi.zxpicturebackend.model.dto.spaceuser;
 
+import com.katomegumi.zxpicturebackend.core.common.req.PageRequest;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class SpaceUserQueryRequest implements Serializable {
+public class SpaceUserQueryRequest extends PageRequest implements Serializable {
 
-    /**
-     * ID
-     */
-    private Long id;
+    private static final long serialVersionUID = 1L;
 
     /**
      * 空间 ID
@@ -26,6 +26,4 @@ public class SpaceUserQueryRequest implements Serializable {
      * 空间角色：viewer/editor/admin
      */
     private String spaceRole;
-
-    private static final long serialVersionUID = 1L;
 }

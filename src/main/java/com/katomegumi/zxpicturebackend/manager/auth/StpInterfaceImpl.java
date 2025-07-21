@@ -1,165 +1,65 @@
 package com.katomegumi.zxpicturebackend.manager.auth;
 
+import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpInterface;
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.ObjUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.ReflectUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.Header;
 import cn.hutool.json.JSONUtil;
-import com.katomegumi.zxpicturebackend.core.common.exception.BusinessException;
-import com.katomegumi.zxpicturebackend.core.common.exception.ErrorCode;
 import com.katomegumi.zxpicturebackend.manager.auth.StpKit.StpKit;
 import com.katomegumi.zxpicturebackend.manager.auth.model.SpaceUserAuthContext;
-import com.katomegumi.zxpicturebackend.manager.auth.model.SpaceUserPermissionConstant;
-import com.katomegumi.zxpicturebackend.model.dao.entity.Picture;
-import com.katomegumi.zxpicturebackend.model.dao.entity.Space;
-import com.katomegumi.zxpicturebackend.model.dao.entity.SpaceUser;
-import com.katomegumi.zxpicturebackend.model.dao.entity.User;
-import com.katomegumi.zxpicturebackend.model.enums.SpaceRoleEnum;
-import com.katomegumi.zxpicturebackend.model.enums.SpaceTypeEnum;
-import com.katomegumi.zxpicturebackend.service.PictureService;
-import com.katomegumi.zxpicturebackend.service.SpaceService;
-import com.katomegumi.zxpicturebackend.service.SpaceUserService;
-import com.katomegumi.zxpicturebackend.service.UserService1;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
-import static com.katomegumi.zxpicturebackend.core.constant.UserConstant.USER_LOGIN_STATE;
 
 /**
- * 自定义权限加载接口实现类 最好只使用一个校验方法 避免混乱
+ * 自定义权限加载接口实现类 最好只使用一个获取权限码的方法 避免混乱
+ *
+ * @author Megumi
  */
-@Component    // 保证此类被 SpringBoot 扫描，完成 Sa-Token 的自定义权限验证扩展
+@Component
+@RequiredArgsConstructor
+@Slf4j
 public class StpInterfaceImpl implements StpInterface {
-
     /**
-     * 请求上下文路径
-     */
-    @Value("${server.servlet.context-path}")
-    private String contentPath;
-
-    @Resource
-    private SpaceService spaceService;
-
-    @Resource
-    private SpaceUserAuthManager spaceUserAuthManager;
-
-    @Resource
-    private SpaceUserService spaceUserService;
-
-    @Resource
-    private PictureService pictureService;
-
-    @Resource
-    private UserService1 userService1;
-
-    /**
-     * 返回一个账号所拥有的权限码集合 
+     * 返回当前 用户的所有权限码
+     *
+     * @param loginId   登录id
+     * @param loginType 登录类型(那个登录体系)
+     * @return 权限码集合
      */
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
         // 判断 loginType，仅对类型为 "space" 进行权限校验
         if (!StpKit.SPACE_TYPE.equals(loginType)) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
-        // 管理员权限，表示权限校验通过
-        List<String> ADMIN_PERMISSIONS = spaceUserAuthManager.getSpaceUserPermissionsByRole(SpaceRoleEnum.ADMIN.getValue());
-        // 获取上下文对象
+        //先判断公共的上传接口 因为此时可能还没有进行空间的登录
         SpaceUserAuthContext authContext = getSpaceUserAuthContextByRequest();
-        // 如果所有字段都为空，表示查询公共图库，可以通过
-        if (isAllFieldsNull(authContext)) {
-            return ADMIN_PERMISSIONS;
+        Long contextSpaceId = authContext.getSpaceId();
+        //如果没传空间
+        if (contextSpaceId == null) {
+            return Collections.emptyList();
         }
-        // 获取 userId
-        User loginUser = (User) StpKit.SPACE.getSessionByLoginId(loginId).get(USER_LOGIN_STATE);
-        if (loginUser == null) {
-            throw new BusinessException(ErrorCode.NO_AUTH_ERROR, "用户未登录");
+
+        SaSession session = StpKit.SPACE.getSession();
+        Long spaceId = session.getModel("spaceId", Long.class);
+        if (!spaceId.equals(contextSpaceId)) {
+            log.error("用户 {} 尝试操作空间 (ID: {})，但当前会话中记录的空间 (ID: {}) 不一致。", loginId, contextSpaceId, spaceId);
+            return Collections.emptyList();
         }
-        Long userId = loginUser.getId();
-        // 优先从上下文中获取 SpaceUser 对象
-        SpaceUser spaceUser = authContext.getSpaceUser();
-        if (spaceUser != null) {
-            return spaceUserAuthManager.getSpaceUserPermissionsByRole(spaceUser.getSpaceRole());
-        }
-        // 如果有 spaceUserId，必然是团队空间，通过数据库查询 SpaceUser 对象
-        Long spaceUserId = authContext.getSpaceUserId();
-        if (spaceUserId != null) {
-            spaceUser = spaceUserService.getById(spaceUserId);
-            if (spaceUser == null) {
-                throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "未找到空间用户信息");
-            }
-            // 取出当前登录用户对应的 spaceUser
-            SpaceUser loginSpaceUser = spaceUserService.lambdaQuery()
-                    .eq(SpaceUser::getSpaceId, spaceUser.getSpaceId())
-                    .eq(SpaceUser::getUserId, userId)
-                    .one();
-            if (loginSpaceUser == null) {
-                return new ArrayList<>();
-            }
-            // 这里会导致管理员在私有空间没有权限，可以再查一次库处理
-            return spaceUserAuthManager.getSpaceUserPermissionsByRole(loginSpaceUser.getSpaceRole());
-        }
-        // 如果没有 spaceUserId，尝试通过 spaceId 或 pictureId 获取 Space 对象并处理
-        Long spaceId = authContext.getSpaceId();
-        if (spaceId == null) {
-            // 如果没有 spaceId，通过 pictureId 获取 Picture 对象和 Space 对象
-            Long pictureId = authContext.getPictureId();
-            // 图片 id 也没有，则默认通过权限校验
-            if (pictureId == null) {
-                return ADMIN_PERMISSIONS;
-            }
-            Picture picture = pictureService.lambdaQuery()
-                    .eq(Picture::getId, pictureId)
-                    .select(Picture::getId, Picture::getSpaceId, Picture::getUserId)
-                    .one();
-            if (picture == null) {
-                throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "未找到图片信息");
-            }
-            spaceId = picture.getSpaceId();
-            // 公共图库，仅本人或管理员可操作
-            if (spaceId == null) {
-                if (picture.getUserId().equals(userId) || userService1.isAdmin(loginUser)) {
-                    return ADMIN_PERMISSIONS;
-                } else {
-                    // 不是自己的图片，仅可查看
-                    return Collections.singletonList(SpaceUserPermissionConstant.PICTURE_VIEW);
-                }
-            }
-        }
-        // 获取 Space 对象
-        Space space = spaceService.getById(spaceId);
-        if (space == null) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "未找到空间信息");
-        }
-        // 根据 Space 类型判断权限
-        if (space.getSpaceType() == SpaceTypeEnum.PRIVATE.getValue()) {
-            // 私有空间，仅本人或管理员有权限
-            if (space.getUserId().equals(userId) || userService1.isAdmin(loginUser)) {
-                return ADMIN_PERMISSIONS;
-            } else {
-                return new ArrayList<>();
-            }
-        } else {
-            // 团队空间，查询 SpaceUser 并获取角色和权限
-            spaceUser = spaceUserService.lambdaQuery()
-                    .eq(SpaceUser::getSpaceId, spaceId)
-                    .eq(SpaceUser::getUserId, userId)
-                    .one();
-            if (spaceUser == null) {
-                return new ArrayList<>();
-            }
-            return spaceUserAuthManager.getSpaceUserPermissionsByRole(spaceUser.getSpaceRole());
-        }
+        //否则返回
+        return session.getModel("permissions", List.class);
     }
 
     /**
@@ -172,24 +72,8 @@ public class StpInterfaceImpl implements StpInterface {
 
 
     /**
-     * 判断对象全部字段都为空
-     * @param object
-     * @return
-     */
-    private boolean isAllFieldsNull(Object object) {
-        if (object == null) {
-            return true; // 对象本身为空
-        }
-        // 获取所有字段并判断是否所有字段都为空
-        return Arrays.stream(ReflectUtil.getFields(object.getClass()))
-                // 获取字段值
-                .map(field -> ReflectUtil.getFieldValue(object, field))
-                // 检查是否所有字段都为空
-                .allMatch(ObjectUtil::isEmpty);
-    }
-
-    /**
      * 根据路径 获取所需要的对应参数
+     *
      * @return SpaceUserAuthContext
      */
     private SpaceUserAuthContext getSpaceUserAuthContextByRequest() {
@@ -197,33 +81,14 @@ public class StpInterfaceImpl implements StpInterface {
         String contentType = request.getHeader(Header.CONTENT_TYPE.getValue());
         SpaceUserAuthContext authRequest;
         //区分get post 请求
-        if (ContentType.JSON.getValue().equals(contentType)) { //post请求
-            String body = ServletUtil.getBody(request); //注意这里request的 body是一个流 用了别的地方就获取不到了 需要添加配置类修改
+        if (ContentType.JSON.getValue().equals(contentType)) {
+            String body = ServletUtil.getBody(request);
             authRequest = JSONUtil.toBean(body, SpaceUserAuthContext.class);
-        }else { //get 请求
+        } else {
             Map<String, String> paramMap = ServletUtil.getParamMap(request);
             authRequest = BeanUtil.toBean(paramMap, SpaceUserAuthContext.class);
         }
-        //区分需要的是那个参数
-        Long id = authRequest.getId();
-        if (ObjUtil.isNotNull(id)){
-            String requestURI = request.getRequestURI();
-            String partURI = requestURI.replace(contentType+"/", "");
-            String moduleName = StrUtil.subBefore(partURI, "/", false);
-            switch (moduleName) {
-                case "picture":
-                    authRequest.setPictureId(id);
-                    break;
-                case "spaceUser":
-                    authRequest.setSpaceUserId(id);
-                    break;
-                case "space":
-                    authRequest.setSpaceId(id);
-                    break;
-                default:
-            }
-        }
         return authRequest;
-        }
     }
+}
 

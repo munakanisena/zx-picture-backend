@@ -1,7 +1,7 @@
 package com.katomegumi.zxpicturebackend.manager.sharding;
 
 import com.baomidou.mybatisplus.extension.toolkit.SqlRunner;
-import com.katomegumi.zxpicturebackend.model.dao.entity.Space;
+import com.katomegumi.zxpicturebackend.model.dao.entity.SpaceInfo;
 import com.katomegumi.zxpicturebackend.model.enums.SpaceLevelEnum;
 import com.katomegumi.zxpicturebackend.model.enums.SpaceTypeEnum;
 import com.katomegumi.zxpicturebackend.service.SpaceService;
@@ -17,7 +17,10 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -27,15 +30,12 @@ import java.util.stream.Collectors;
 @Slf4j
 public class DynamicShardingManager {
 
+    private static final String LOGIC_TABLE_NAME = "tb_picture";
+    private static final String DATABASE_NAME = "logic_db"; // 配置文件中的数据库名称
     @Resource
     private DataSource dataSource;
-
     @Resource
-    private SpaceService spaceService;
-
-    private static final String LOGIC_TABLE_NAME = "tb_picture";
-
-    private static final String DATABASE_NAME = "logic_db"; // 配置文件中的数据库名称
+    private SpaceService spaceServiceOld;
 
     @PostConstruct
     public void initialize() {
@@ -48,11 +48,11 @@ public class DynamicShardingManager {
      */
     private Set<String> fetchAllPictureTableNames() {
         // 为了测试方便，直接对所有团队空间分表（实际上线改为仅对旗舰版生效）
-        Set<Long> spaceIds = spaceService.lambdaQuery()
-                .eq(Space::getSpaceType, SpaceTypeEnum.TEAM.getValue())
+        Set<Long> spaceIds = spaceServiceOld.lambdaQuery()
+                .eq(SpaceInfo::getSpaceType, SpaceTypeEnum.TEAM.getKey())
                 .list()
                 .stream()
-                .map(Space::getId)
+                .map(SpaceInfo::getId)
                 .collect(Collectors.toSet());
         Set<String> tableNames = spaceIds.stream()
                 .map(spaceId -> LOGIC_TABLE_NAME + "_" + spaceId)
@@ -104,21 +104,21 @@ public class DynamicShardingManager {
         }
     }
 
-    public void createTable(Space space){
-    if (space.getSpaceType() == SpaceTypeEnum.TEAM.getValue() && space.getSpaceLevel() == SpaceLevelEnum.FLAGSHIP.getValue()){
-         String tableName= LOGIC_TABLE_NAME+"_"+space.getId();
-         //建表语句
-        String createSql="create table "+tableName+" LIKE tb_picture";
-        try {
-            SqlRunner.db().update(createSql);
-            //更新分表
-            updateShardingTableNodes();
-        } catch (Exception e){
-            e.printStackTrace();
+    public void createTable(SpaceInfo space) {
+        if (space.getSpaceType() == SpaceTypeEnum.TEAM.getKey() && space.getSpaceLevel() == SpaceLevelEnum.FLAGSHIP.getKey()) {
+            String tableName = LOGIC_TABLE_NAME + "_" + space.getId();
+            //建表语句
+            String createSql = "create table " + tableName + " LIKE tb_picture";
+            try {
+                SqlRunner.db().update(createSql);
+                //更新分表
+                updateShardingTableNodes();
+            } catch (Exception e) {
+                e.printStackTrace();
 
-            log.error("分表失败,失败Id{}",space.getId());
+                log.error("分表失败,失败Id{}", space.getId());
+            }
         }
-    }
     }
 
     /**

@@ -44,15 +44,24 @@ public class UploadPictureResult {
     private String originColor ;
 
     /**
+     * 原图片资源路径
+     */
+    private String originPath;
+
+    /**
      * 图片名称(展示)
      */
     private String picName;
-
 
     /**
      * 压缩图片地址
      */
     private String compressUrl;
+
+    /**
+     * 压缩图资源路径
+     */
+    private String compressPath;
 
     /**
      * 压缩图片格式
@@ -63,4 +72,10 @@ public class UploadPictureResult {
      * 缩略图URL
      */
     private String thumbnailUrl;
+
+    /**
+     * 缩略图资源路径
+     */
+    private String thumbnailPath;
+
 }

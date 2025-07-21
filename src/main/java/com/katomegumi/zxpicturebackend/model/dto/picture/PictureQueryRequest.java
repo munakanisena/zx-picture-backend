@@ -5,12 +5,18 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class PictureQueryRequest extends PageRequest implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 搜索词（同时搜 名称 简介 标签）
+     */
+    private String searchText;
 
     /**
      * id
@@ -18,19 +24,44 @@ public class PictureQueryRequest extends PageRequest implements Serializable {
     private Long id;
 
     /**
-     * 图片名称
+     * 原图格式
      */
-    private String name;
+    private String originFormat;
 
     /**
-     * 简介
+     * 原图宽度
      */
-    private String introduction;
+    private Integer originWidth;
 
     /**
-     * 分类
+     * 原图高度
      */
-    private String category;
+    private Integer originHeight;
+
+    /**
+     * 原图比例（宽高比）
+     */
+    private Double originScale;
+
+    /**
+     * 原图主色调
+     */
+    private String originColor;
+
+    /**
+     * 图片名称（展示）
+     */
+    private String picName;
+
+    /**
+     * 图片描述（展示）
+     */
+    private String picDesc;
+
+    /**
+     * 分类 ID
+     */
+    private Long categoryId;
 
     /**
      * 标签
@@ -38,42 +69,17 @@ public class PictureQueryRequest extends PageRequest implements Serializable {
     private List<String> tags;
 
     /**
-     * 文件体积
-     */
-    private Long picSize;
-
-    /**
-     * 图片宽度
-     */
-    private Integer picWidth;
-
-    /**
-     * 图片高度
-     */
-    private Integer picHeight;
-
-    /**
-     * 图片比例
-     */
-    private Double picScale;
-
-    /**
-     * 图片格式
-     */
-    private String picFormat;
-
-    /**
-     * 搜索词（同时搜名称、简介等）
-     */
-    private String searchText;
-
-    /**
-     * 用户 id
+     * 创建用户 ID
      */
     private Long userId;
 
     /**
-     * 状态：0-待审核; 1-通过; 2-拒绝
+     * 所属空间 ID（0-表示公共空间）
+     */
+    private Long spaceId;
+
+    /**
+     * 审核状态（0-待审核, 1-通过, 2-拒绝）
      */
     private Integer reviewStatus;
 
@@ -83,30 +89,18 @@ public class PictureQueryRequest extends PageRequest implements Serializable {
     private String reviewMessage;
 
     /**
-     * 审核人 id
+     * 审核人 ID
      */
     private Long reviewerId;
 
     /**
-     * 空间 id
+     * 编辑时间[开始时间]
      */
-    private Long spaceId;
+    private String startEditTime;
 
     /**
-     * 是否只查询 spaceId 为 null 的数据 也就是公共图库
+     * 编辑时间[结束时间]
      */
-    private boolean nullSpaceId;
-
-    /**
-     * 开始编辑时间
-     */
-    private Date startEditTime;
-
-    /**
-     * 结束编辑时间
-     */
-    private Date endEditTime;
-
-    private static final long serialVersionUID = 1L;
+    private String endEditTime;
 }
 

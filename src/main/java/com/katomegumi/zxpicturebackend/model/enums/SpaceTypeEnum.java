@@ -1,37 +1,38 @@
 package com.katomegumi.zxpicturebackend.model.enums;
 
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjUtil;
 import lombok.Getter;
-/*
-空间类型 枚举类
+
+/**
+ * @author Megumi
+ * 空间类型 枚举类
  */
 @Getter
 public enum SpaceTypeEnum {
 
-    PRIVATE("私有空间", 0),
-    TEAM("团队空间", 1);
+    PUBLIC(0, "公共空间"),
+    PRIVATE(1, "私有空间"),
+    TEAM(2, "团队空间");
 
-    private final String text;
+    private final Integer key;
+    private final String label;
 
-    private final int value;
-
-    SpaceTypeEnum(String text, int value) {
-        this.text = text;
-        this.value = value;
+    SpaceTypeEnum(Integer key, String label) {
+        this.key = key;
+        this.label = label;
     }
 
     /**
-     * 根据 value 获取枚举
+     * 根据 KEY 获取枚举
+     *
+     * @param key 状态键值
+     * @return 枚举对象，未找到时返回 null
      */
-    public static SpaceTypeEnum getEnumByValue(Integer value) {
-        if (ObjUtil.isEmpty(value)) {
+    public static SpaceTypeEnum getEnumByKey(Integer key) {
+        if (ObjUtil.isEmpty(key)) {
             return null;
         }
-        for (SpaceTypeEnum spaceTypeEnum : SpaceTypeEnum.values()) {
-            if (spaceTypeEnum.value == value) {
-                return spaceTypeEnum;
-            }
-        }
-        return null;
+        return ArrayUtil.firstMatch(e -> e.getKey().equals(key), values());
     }
 }

@@ -1,5 +1,6 @@
 package com.katomegumi.zxpicturebackend.model.enums;
 
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjUtil;
 import lombok.Getter;
 
@@ -10,44 +11,35 @@ import lombok.Getter;
  */
 @Getter
 public enum UserDisabledEnum {
-    NORMAL( "正常",0),
-    DISABLED( "禁用",1);
 
-    private final String text;
-    private final Integer value;
+    NORMAL(0, "正常"),
+    DISABLED(1, "禁用");
 
+    private final int key;
+    private final String label;
 
-     UserDisabledEnum(String text,Integer value) {
-         this.text = text;
-         this.value = value;
+    UserDisabledEnum(int key, String label) {
+        this.key = key;
+        this.label = label;
     }
-
 
     /**
      * 是否禁用
-     * @param value
-     * @return
      */
-    public static Boolean isDisabled(Integer value){
-         return DISABLED.getValue().equals(value);
+    public static Boolean isDisabled(Integer key) {
+        return DISABLED.getKey() == key;
     }
 
-
     /**
-     * 通过值 获取对应枚举类
-     * @param value
-     * @return
+     * 根据 KEY 获取枚举
+     * @param key 状态键值
+     * @return 枚举对象，未找到时返回 null
      */
-    public static UserDisabledEnum fromValue(Integer value) {
-         if (ObjUtil.isEmpty(value)){
-             return null;
-         }
-        for (UserDisabledEnum userDisabledEnum : UserDisabledEnum.values()) {
-            if (userDisabledEnum.value.equals(value)) {
-                return userDisabledEnum;
-            }
+    public static UserDisabledEnum getEnumByKey(Integer key) {
+        if (ObjUtil.isEmpty(key)) {
+            return null;
         }
-        return null;
-}
+        return ArrayUtil.firstMatch(e -> e.getKey() == key, values());
+    }
 }
 

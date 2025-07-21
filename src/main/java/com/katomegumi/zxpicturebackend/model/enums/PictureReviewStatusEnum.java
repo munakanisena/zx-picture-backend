@@ -1,7 +1,7 @@
 package com.katomegumi.zxpicturebackend.model.enums;
 
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjUtil;
-
 import lombok.Getter;
 
 /**
@@ -9,32 +9,27 @@ import lombok.Getter;
  */
 @Getter
 public enum PictureReviewStatusEnum {
-    REVIEW("待审核",0),
-    PASS("通过",1),
-    REJECT("拒绝",2);
+    REVIEW(0, "待审核"),
+    PASS(1, "通过"),
+    REJECT(2, "拒绝");
 
-    private final String text;
-    private final int value;
+    private final int key;
+    private final String label;
 
-    PictureReviewStatusEnum(String text, int value) {
-        this.text = text;
-        this.value = value;
+    PictureReviewStatusEnum(int key, String label) {
+        this.key = key;
+        this.label = label;
     }
 
     /**
-     * 通过value获取 枚举类
-     * @param value
-     * @return
+     * 根据 KEY 获取枚举
+     * @param key 状态键值
+     * @return 枚举对象，未找到时返回 null
      */
-    public static PictureReviewStatusEnum getEnumByValue(Integer value) {
-        if (ObjUtil.isEmpty(value)) {
+    public static PictureReviewStatusEnum getEnumByKey(Integer key) {
+        if (ObjUtil.isEmpty(key)) {
             return null;
         }
-        for (PictureReviewStatusEnum e : PictureReviewStatusEnum.values()) {
-            if (e.getValue()==value) {
-                return e;
-            }
-        }
-        return null;
+        return ArrayUtil.firstMatch(e -> e.getKey() == key, values());
     }
 }

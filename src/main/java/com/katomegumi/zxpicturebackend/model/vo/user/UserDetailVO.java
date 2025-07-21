@@ -7,10 +7,12 @@ import java.util.Date;
 
 /**
  * @author Megumi
- * @description : 给其他用户返回的 用户信息
+ * @description :用户信息
  */
 @Data
-public class UserDetailVO implements Serializable{
+public class UserDetailVO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 主键ID
@@ -20,28 +22,17 @@ public class UserDetailVO implements Serializable{
     /**
      * 登录名及昵称
      */
-    private String username;
-
+    private String name;
 
     /**
      * 用户头像
      */
-    private String userAvatar;
-
-    /**
-     * 用户性别;0-男 1-女
-     */
-    private Integer userSex;
+    private String avatar;
 
     /**
      * 用户简介
      */
-    private String userProfile;
-
-    /**
-     * 出生日期
-     */
-    private Date birthday;
+    private String introduction;
 
     /**
      * 会员编号
@@ -51,14 +42,15 @@ public class UserDetailVO implements Serializable{
     /**
      * 用户角色（USER-普通用户, ADMIN-管理员）
      */
-    private String userRole;
+    private String role;
 
     /**
      * 是否为会员;0-否 1-是
      */
     private Integer isVip;
 
-
-    private static final long serialVersionUID = 1L;
-
+    /**
+     * 创建时间
+     */
+    private Date createTime;
 }

@@ -1,5 +1,6 @@
 package com.katomegumi.zxpicturebackend.model.enums;
 
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjUtil;
 import lombok.Getter;
 
@@ -10,56 +11,46 @@ import java.util.stream.Collectors;
 @Getter
 public enum SpaceRoleEnum {
 
-    VIEWER("浏览者", "viewer"),
-    EDITOR("编辑者", "editor"),
-    ADMIN("管理员", "admin");
+    VIEWER("viewer", "浏览者"),
+    EDITOR("editor", "编辑者"),
+    ADMIN("admin", "管理员");
 
-    private final String text;
+    private final String key;
+    private final String label;
 
-    private final String value;
-
-    SpaceRoleEnum(String text, String value) {
-        this.text = text;
-        this.value = value;
+    SpaceRoleEnum(String key, String label) {
+        this.key = key;
+        this.label = label;
     }
 
     /**
-     * 根据 value 获取枚举
+     * 根据 KEY 获取枚举
      *
-     * @param value 枚举值的 value
-     * @return 枚举值
+     * @param key 状态键值
+     * @return 枚举对象，未找到时返回 null
      */
-    public static SpaceRoleEnum getEnumByValue(String value) {
-        if (ObjUtil.isEmpty(value)) {
+    public static SpaceRoleEnum getEnumByKey(String key) {
+        if (ObjUtil.isEmpty(key)) {
             return null;
         }
-        for (SpaceRoleEnum anEnum : SpaceRoleEnum.values()) {
-            if (anEnum.value.equals(value)) {
-                return anEnum;
-            }
-        }
-        return null;
+        return ArrayUtil.firstMatch(e -> e.getKey().equals(key), values());
     }
 
     /**
-     * 获取所有枚举的文本列表
-     *
-     * @return 文本列表
+     * 获取所有枚举的 label 列表
      */
-    public static List<String> getAllTexts() {
-        return Arrays.stream(SpaceRoleEnum.values())
-                .map(SpaceRoleEnum::getText)
+    public static List<String> getLabels() {
+        return Arrays.stream(values())
+                .map(SpaceRoleEnum::getLabel)
                 .collect(Collectors.toList());
     }
 
     /**
-     * 获取所有枚举的值列表
-     *
-     * @return 值列表
+     * 获取所有枚举的 key 列表
      */
-    public static List<String> getAllValues() {
-        return Arrays.stream(SpaceRoleEnum.values())
-                .map(SpaceRoleEnum::getValue)
+    public static List<String> getKeys() {
+        return Arrays.stream(values())
+                .map(SpaceRoleEnum::getKey)
                 .collect(Collectors.toList());
     }
 }

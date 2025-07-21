@@ -11,6 +11,8 @@ import java.util.List;
 @Data
 public class SpaceUserRole implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * 角色键
      */
@@ -30,6 +32,4 @@ public class SpaceUserRole implements Serializable {
      * 角色描述
      */
     private String description;
-
-    private static final long serialVersionUID = 1L;
 }

@@ -1,118 +1,214 @@
 package com.katomegumi.zxpicturebackend.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.katomegumi.zxpicturebackend.core.api.aliyunai.model.CreateOutPaintingTaskResponse;
-import com.katomegumi.zxpicturebackend.model.dto.picture.*;
-import com.katomegumi.zxpicturebackend.model.dao.entity.Picture;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.katomegumi.zxpicturebackend.model.dao.entity.User;
-import com.katomegumi.zxpicturebackend.model.vo.PictureVO;
-import org.springframework.scheduling.annotation.Async;
+import com.katomegumi.zxpicturebackend.core.api.aliyunai.model.CreateOutPaintingTaskResponse;
+import com.katomegumi.zxpicturebackend.core.api.aliyunai.model.GetOutPaintingTaskResponse;
+import com.katomegumi.zxpicturebackend.core.api.search.model.SearchPictureResult;
+import com.katomegumi.zxpicturebackend.core.common.resp.PageVO;
+import com.katomegumi.zxpicturebackend.model.dao.entity.PictureInfo;
+import com.katomegumi.zxpicturebackend.model.dao.entity.UserInfo;
+import com.katomegumi.zxpicturebackend.model.dto.picture.*;
+import com.katomegumi.zxpicturebackend.model.vo.picture.*;
+import lombok.SneakyThrows;
 
-import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 /**
-* @author lirui
-* @description 针对表【tb_picture(图片)】的数据库操作Service
-* @createDate 2025-02-15 19:51:44
-*/
-public interface PictureService extends IService<Picture> {
+ * @author lirui
+ * @description 针对表【picture_info(图片信息表)】的数据库操作Service
+ * @createDate 2025-05-24 14:26:44
+ */
+public interface PictureService extends IService<PictureInfo> {
+
     /**
      * 上传图片
      *
-     * @param inputSource
-     * @param pictureUploadRequest
-     * @param loginUser
+     * @param pictureInputSource   上传源 (文件 或者 地址)
+     * @param pictureUploadRequest 上传请求
+     * @return 图片信息
+     */
+    PictureDetailVO uploadPicture(Object pictureInputSource, PictureUploadRequest pictureUploadRequest);
+
+
+    /**
+     * 根据id删除图片
+     *
+     * @param pictureId 图片id
+     */
+    void deletePictureById(long pictureId);
+
+
+    /**
+     * 根据id修改图片信息
+     *
+     * @param pictureEditRequest 修改请求
+     */
+    void editPicture(PictureEditRequest pictureEditRequest);
+
+
+    /**
+     * 根据id获取图片详情
+     *
+     * @param pictureId 图片id
+     * @return 图片详情
+     */
+    PictureDetailVO getPictureDetailById(Long pictureId);
+
+
+    /**
+     * 获取个人空间图片分页列表
+     *
+     * @param pictureQueryRequest 图片查询请求
+     * @return 个人空间图片分页列表
+     */
+    PageVO<PictureVO> getPicturePageListAsPersonSpace(PictureQueryRequest pictureQueryRequest);
+
+    /**
+     * 获取团队空间图片分页列表
+     *
+     * @param pictureQueryRequest 图片查询请求
+     * @return 团队空间图片分页列表
+     */
+    PageVO<PictureVO> getPicturePageListAsTeamSpace(PictureQueryRequest pictureQueryRequest);
+
+    /**
+     * 获取收藏图片分页列表
+     *
+     * @param pictureQueryRequest 图片查询请求
+     * @return 收藏图片分页列表
+     */
+    PageVO<PictureHomeVO> getCollectPictureList(PictureQueryRequest pictureQueryRequest);
+
+
+    /**
+     * 获取当前用户 收藏数量 和上传数量
+     *
+     * @return 用户收藏数量和上传数量
+     */
+    UserPictureStatsVO getUserPictureStats();
+
+    /**
+     * 下载图片
+     *
+     * @param pictureId 图片id
+     * @return 图片下载地址
+     */
+    String pictureDownload(Long pictureId);
+
+    /**
+     * 填充审核参数
+     *
+     * @param pictureInfo 图片信息
+     * @param userInfo    用户信息
+     */
+    void fillReviewParams(PictureInfo pictureInfo, UserInfo userInfo);
+
+    /**
+     * 进行点赞或者收藏
+     *
+     * @param pictureInteractionRequest 点赞或者收藏请求
+     */
+    void likeOrCollection(PictureInteractionRequest pictureInteractionRequest);
+
+    /**
+     * 判断图片是否存在
+     *
+     * @param pictureId 图片id
+     */
+    void existPictureById(Long pictureId);
+
+
+    /**
+     * 获取redis指定key的变化量
+     *
+     * @param redisKey
+     * @param pictureIds
      * @return
      */
-    PictureVO uploadPicture(Object inputSource,
-                            PictureUploadRequest pictureUploadRequest,
-                            User loginUser);
+    Map<Long, Integer> getRedisDeltas(String redisKey, List<Long> pictureIds);
 
     /**
-     * 封装 query对象 便于读取
-     * @param pictureQueryRequest
-     * @return
+     * 爬取图片
+     *
+     * @param capturePictureRequest 爬取请求
+     * @return 爬取数量
      */
-    QueryWrapper<Picture> getQueryWrapper(PictureQueryRequest pictureQueryRequest);
+    List<CapturePictureResult> capturePicture(capturePictureRequest capturePictureRequest);
 
     /**
-     * 获取单个图片封装
-     * @param picture
-     * @param request
-     * @return
+     * 上传爬取的图片
+     *
+     * @param pictureUploadRequest 上传请求
      */
-    PictureVO getPictureVO(Picture picture, HttpServletRequest request);
+
+    void uploadPictureByCapture(PictureUploadRequest pictureUploadRequest);
 
     /**
-     * 获取多个图片 封装
-     * @param picturePage
-     * @param request
-     * @return
+     * 创建 AI扩图任务
+     *
+     * @param pictureExtendRequest 扩图任务请求
+     * @return 扩图任务结果
      */
-    Page<PictureVO> getPictureVOPage(Page<Picture> picturePage, HttpServletRequest request);
-
-    void deletePicture(long pictureId, User loginUser);
-
-    void editPicture(PictureEditRequest pictureEditRequest, User loginUser);
-
+    CreateOutPaintingTaskResponse createPictureExtendTask(PictureExtendRequest pictureExtendRequest);
 
     /**
-     * 图片更新 修改时进行校验
-     * @param picture
+     * 获取 AI扩图任务
+     *
+     * @param taskId 任务id
+     * @return 扩图结果
      */
-    void validPicture(Picture picture);
+    GetOutPaintingTaskResponse queryPictureExtendTask(String taskId);
+
+    //-------------管理员使用-------------
 
     /**
-     * 审核请求
-     * @param pictureReviewRequest
-     * @param loginUser
+     * 以图搜图
+     *
+     * @param searchPictureByPictureRequest 以图搜图请求
+     * @return 搜索结果
      */
-    void doPictureReview(PictureReviewRequest pictureReviewRequest,User loginUser);
+    List<SearchPictureResult> searchPictureByPicture(SearchPictureByPictureRequest searchPictureByPictureRequest);
 
     /**
-     * 更新或者修改 都需要进行审核
-     * @param picture
-     * @param loginUser
+     * 颜色搜索(目前仅 搜索自己的空间)
+     *
+     * @param searchPictureByColorRequest 颜色搜索请求
+     * @return 搜索结果
      */
-    void fillReviewParams(Picture picture, User loginUser);
+    PageVO<PictureVO> searchPictureByPicColor(SearchPictureByColorRequest searchPictureByColorRequest);
 
     /**
-     * 批量抓取图片
-     * @param pictureUploadByBatchRequest
-     * @param loginUser
-     * @return
+     * 审核图片 (包含批量审核)
+     *
+     * @param pictureReviewRequest 审核请求
      */
-    Integer uploadPictureByBatch(PictureUploadByBatchRequest pictureUploadByBatchRequest, User loginUser);
-
-    @Async
-    void clearPictureFile(Picture picture);
-
-    void checkPictureAuth(User loginUser, Picture picture);
+    void reviewPicture(PictureReviewRequest pictureReviewRequest);
 
     /**
-     * 根据主色调查找相似图片
-     * @param spaceId
-     * @param picColor
-     * @param loginUser
-     * @return
+     * 管理员更新图片
+     *
+     * @param pictureUpdateRequest 更新请求
      */
-    List<PictureVO> searchPictureByPicColor(Long spaceId, String picColor, User loginUser);
+    void updatePicture(PictureUpdateRequest pictureUpdateRequest);
 
     /**
-     * 批处理图片
-     * @param pictureEditByBatchRequest
-     * @param loginUser
+     * 分页获取图片列表 (仅管理员可用)
+     *
+     * @param pictureQueryRequest 请求参数
+     * @return 图片列表
      */
-    void editPictureByBatch(PictureEditByBatchRequest pictureEditByBatchRequest, User loginUser);
+    PageVO<PictureVO> getPicturePageListAsManage(PictureQueryRequest pictureQueryRequest);
 
     /**
-     * 创建扩图任务
-     * @param createPictureOutPaintingTaskRequest
-     * @param loginUser
-     * @return 任务ID
+     * 构造查询参数
+     *
+     * @param pictureQueryRequest 请求参数
+     * @return LambdaQueryWrapper
      */
-    CreateOutPaintingTaskResponse createPictureOutPaintingTask(CreatePictureOutPaintingTaskRequest createPictureOutPaintingTaskRequest, User loginUser);
+    @SneakyThrows(ParseException.class)
+    LambdaQueryWrapper<PictureInfo> getLambdaQueryWrapper(PictureQueryRequest pictureQueryRequest);
+
 }

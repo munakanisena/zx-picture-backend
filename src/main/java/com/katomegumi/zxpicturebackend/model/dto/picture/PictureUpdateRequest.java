@@ -17,19 +17,19 @@ public class PictureUpdateRequest implements Serializable {
     private Long id;
 
     /**
-     * 图片名称
+     * 图片名称（展示）
      */
-    private String name;
+    private String picName;
 
     /**
-     * 简介
+     * 图片描述（展示）
      */
-    private String introduction;
+    private String picDesc;
 
     /**
-     * 分类
+     * 分类 ID
      */
-    private String category;
+    private Long categoryId;
 
     /**
      * 标签

@@ -1,25 +1,23 @@
 package com.katomegumi.zxpicturebackend.model.vo.space.analyze;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Builder
 public class SpaceTagAnalyzeResponse implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 标签名称
      */
-    private String tag;
+    private String tagName;
 
     /**
      * 标签的图片数量
      */
     private Long count;
-
-    private static final long serialVersionUID = 1L;
 }

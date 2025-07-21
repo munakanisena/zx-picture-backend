@@ -1,65 +1,64 @@
 package com.katomegumi.zxpicturebackend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.katomegumi.zxpicturebackend.core.api.aliyunai.model.SpaceSizeAnalyzeRequest;
+import com.katomegumi.zxpicturebackend.model.dao.entity.SpaceInfo;
 import com.katomegumi.zxpicturebackend.model.dto.space.analyze.*;
 import com.katomegumi.zxpicturebackend.model.vo.space.analyze.*;
-import com.katomegumi.zxpicturebackend.model.dao.entity.Space;
-import com.katomegumi.zxpicturebackend.model.dao.entity.User;
+import com.katomegumi.zxpicturebackend.model.vo.space.info.SpaceVO;
 
 import java.util.List;
 
 /**
- * 图库分析接口
+ * @author Megumi
+ * @description 图库分析接口
  */
-public interface SpaceAnalyzeService extends IService<Space> {
+public interface SpaceAnalyzeService extends IService<SpaceInfo> {
 
     /**
-     * 图库资源分析解救
-     * @param spaceUsageAnalyzeRequest
-     * @param loginUser
-     * @return
+     * 分析空间内图片使用情况
+     *
+     * @param spaceUsageAnalyzeRequest 空间使用分析请求
+     * @return 空间使用情况
      */
-    SpaceUsageAnalyzeResponse getSpaceUsageAnalyze(SpaceUsageAnalyzeRequest spaceUsageAnalyzeRequest, User loginUser);
+    SpaceUsageAnalyzeResponse analyzeSpaceUsed(SpaceUsageAnalyzeRequest spaceUsageAnalyzeRequest);
 
     /**
-     * 根据图片 分类 获取各个不同分类的图片总数 和图片总大小
-     * @param spaceCategoryAnalyzeRequest
-     * @param loginUser
-     * @return
+     * 分析空间内图片分类 的数量和大小
+     *
+     * @param spaceCategoryAnalyzeRequest 空间分类分析请求
+     * @return 空间分类分析结果
      */
-    List<SpaceCategoryAnalyzeResponse> getSpaceCategoryAnalyze(SpaceCategoryAnalyzeRequest spaceCategoryAnalyzeRequest, User loginUser);
+    List<SpaceCategoryAnalyzeResponse> analyzeSpaceCategory(SpaceCategoryAnalyzeRequest spaceCategoryAnalyzeRequest);
 
     /**
-     * 图片标签 出现次数
-     * @param spaceTagAnalyzeRequest
-     * @param loginUser
-     * @return
+     * 分析空间内图片的标签出现次数
+     *
+     * @param spaceTagAnalyzeRequest 空间标签分析请求
+     * @return 空间标签分析结果
      */
-    List<SpaceTagAnalyzeResponse> getSpaceTagAnalyze(SpaceTagAnalyzeRequest spaceTagAnalyzeRequest, User loginUser);
+    List<SpaceTagAnalyzeResponse> analyzeSpaceTags(SpaceTagAnalyzeRequest spaceTagAnalyzeRequest);
 
     /**
-     * 根据图片大小进行分类
-     * @param spaceSizeAnalyzeRequest
-     * @param loginUser
-     * @return
+     * 分析空间内图片的大小范围
+     *
+     * @param spaceSizeAnalyzeRequest 空间大小分析请求
+     * @return 空间大小分析结果
      */
-    List<SpaceSizeAnalyzeResponse> getSpaceSizeAnalyze(SpaceSizeAnalyzeRequest spaceSizeAnalyzeRequest, User loginUser);
+    List<SpaceSizeAnalyzeResponse> analyzeSpaceSize(SpaceSizeAnalyzeRequest spaceSizeAnalyzeRequest);
 
     /**
      * 分析用户上传行为
-     * @param spaceUserAnalyzeRequest
-     * @param loginUser
-     * @return
+     *
+     * @param spaceUserAnalyzeRequest 用户上传行为分析请求
+     * @return 用户上传行为分析结果
      */
-    List<SpaceUserAnalyzeResponse> getSpaceUserAnalyze(SpaceUserAnalyzeRequest spaceUserAnalyzeRequest, User loginUser);
+    List<SpaceUserAnalyzeResponse> analyzeSpaceUserAction(SpaceUserAnalyzeRequest spaceUserAnalyzeRequest);
 
     /**
-     * 按存储使用量排序查询(仅管理员可用)
-     * @param spaceRankAnalyzeRequest
-     * @param loginUser
-     * @return
+     * 按存储使用量排序查询 获取前10
+     *
+     * @return 空间排名分析结果
      */
-    List<Space> getSpaceRankAnalyze(SpaceRankAnalyzeRequest spaceRankAnalyzeRequest, User loginUser);
+    List<SpaceVO> analyzeSpaceRank();
 
 }

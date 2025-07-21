@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.katomegumi.zxpicturebackend.model.dao.mapper.PictureCategoryMapper">
+    <resultMap id="BaseResultMap" type="com.katomegumi.zxpicturebackend.model.dao.entity.PictureCategory">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="useNum" column="use_num"/>
+        <result property="userId" column="user_id"/>
+        <result property="isDelete" column="is_delete"/>
+        <result property="editTime" column="edit_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,parent_id,use_num,user_id,is_delete,
+        edit_time,create_time,update_time
+    </sql>
+
+    <select id="selectMapByIds" resultType="com.katomegumi.zxpicturebackend.model.dao.entity.PictureCategory">
+        SELECT * from picture_category WHERE id IN
+        <foreach collection="categoryIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

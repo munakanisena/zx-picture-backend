@@ -1,7 +1,7 @@
 package com.katomegumi.zxpicturebackend.manager.websocket.disruptor;
 
 import com.katomegumi.zxpicturebackend.manager.websocket.model.PictureEditRequestMessage;
-import com.katomegumi.zxpicturebackend.model.dao.entity.User;
+import com.katomegumi.zxpicturebackend.model.dao.entity.UserInfo;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ public class PictureEditEventProducer {
     @Resource
     private Disruptor<PictureEditEvent> pictureEditEventDisruptor;
 
-    public void publishEvent(PictureEditRequestMessage pictureEditRequestMessage, WebSocketSession session, User user, Long pictureId){
+    public void publishEvent(PictureEditRequestMessage pictureEditRequestMessage, WebSocketSession session, UserInfo user, Long pictureId) {
         RingBuffer<PictureEditEvent> ringBuffer = pictureEditEventDisruptor.getRingBuffer();
         //获取可以插入位置
         long next = ringBuffer.next();

@@ -4,6 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author Megumi
+ * @description 图片编辑请求消息
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

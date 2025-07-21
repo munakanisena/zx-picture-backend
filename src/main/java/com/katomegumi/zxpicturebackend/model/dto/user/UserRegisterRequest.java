@@ -17,12 +17,12 @@ public class UserRegisterRequest implements Serializable {
     /**
      * 用户名
      */
-    private String username;
+    private String name;
 
     /**
      * 用户邮箱
      */
-    private String userEmail;
+    private String email;
 
     /*
      * 邮箱验证码

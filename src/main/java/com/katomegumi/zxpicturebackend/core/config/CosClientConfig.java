@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Megumi
- * Cos客户端配置
+ * 腾讯云对象存储Cos客户端配置
  */
 @Configuration
 @Data
@@ -43,7 +43,7 @@ public class CosClientConfig {
     /**
      * 桶名
      */
-    private String bucket;
+    private String bucketName;
 
     @Bean
     public COSClient getCOSClient() {

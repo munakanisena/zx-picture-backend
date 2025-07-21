@@ -1,5 +1,7 @@
 package com.katomegumi.zxpicturebackend.model.enums;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 
@@ -9,37 +11,33 @@ import lombok.Getter;
 @Getter
 public enum UserRoleEnum {
 
-    USER("用户","user"),
-    ADMIN("管理员","admin");
+    USER("user", "用户"),
+    ADMIN("admin", "管理员");
 
-    private final String text;
-    private final String value;
+    private final String key;
+    private final String label;
 
-
-
-    UserRoleEnum(String text, String value) {
-        this.text = text;
-        this.value = value;
+    UserRoleEnum(String key, String label) {
+        this.key = key;
+        this.label = label;
     }
 
-    /**根据 值获取枚举类
-     *
-     * @param value
-     * @return 枚举值
+    /**
+     * 根据 KEY 获取枚举
+     * @param key 状态键值
+     * @return 枚举对象，未找到时返回 null
      */
-    public static UserRoleEnum getUserRoleEnum(String value) {
-        if (StrUtil.isBlank(value)) {
+    public static UserRoleEnum getEnumByKey(String key) {
+        if (ObjUtil.isEmpty(key)) {
             return null;
         }
-        //如果枚举值很多 可以先将枚举封装到map然后再进行 匹配操作
-
-        for (UserRoleEnum userRoleEnum :values()) {
-            if(userRoleEnum.getValue().equals(value)){
-                return userRoleEnum;
-            }
-        }
-
-       return null;
+        return ArrayUtil.firstMatch(e -> e.getKey().equals(key), values());
     }
 
+    /**
+     * 判断是否是管理员
+     */
+    public static Boolean isAdmin(String key) {
+        return ADMIN.key.equals(key);
+    }
 }

@@ -6,45 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>注册验证码</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
         .container {
-            width: 80%;
-            max-width: 600px;
+            width: 50%;
             margin: 0 auto;
             text-align: center;
         }
+
         .header {
             background-color: #e6f2ff;
-            padding: 20px;
+            padding: 30px;
             /*设置元素的外边框圆角*/
             border-radius: 14px 14px 0 0;
             margin-bottom: 30px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
+
         .logo {
             height: 30px;
             vertical-align: middle;
         }
+
         .title {
             display: inline-block;
             margin-left: 10px;
             font-size: 24px;
             color: #27272a;
         }
+
         .message {
             color: #374151;
             font-size: 16px;
             line-height: 24px;
             margin: 0 0 24px 0;
         }
+
         .code {
             font-size: 32px;
             letter-spacing: 4px;
@@ -55,37 +53,46 @@
             margin: 24px 0;
             display: inline-block;
         }
+
         .expiry {
             color: #333333;
             margin-bottom: 30px;
         }
+
         .disclaimer {
             color: #a1a1aa;
             font-size: 14px;
             display: block;
             margin-block-start: 1em;
             margin-block-end: 1em;
-            margin-inline-start: 0px;
-            margin-inline-end: 0px;
+            margin-inline-start: 0;
+            margin-inline-end: 0;
             unicode-bidi: isolate;
         }
+
         hr {
             color: #a1a1aa;
             font-size: 14px;
             margin-top: 24px;
             border-top: 1px solid #e4e4e7;
         }
+
+        @media screen and (max-width: 600px) {
+            .container {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header">
-<!--        注意上线改为自己的logo地址-->
+        <!--        注意上线改为自己的logo地址-->
         <img class="logo" src="logo.png" alt="惠眸图界 Logo">
         <span class="title">欢迎注册 惠眸图界</span>
     </div>
     <p class="message">感谢您注册 惠眸图界, 请使用下面的验证码以完成您的注册</p>
-        <span class="code" th:text="${captcha}"></span>
+    <span class="code" th:text="${captcha}"></span>
     <p class="expiry">验证码在五分钟之内有效。</p>
     <hr>
     <p class="disclaimer">如果您没有进行相关操作, 请忽略这封邮件。</p>

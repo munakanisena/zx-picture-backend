@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @MapperScan("com.katomegumi.zxpicturebackend.model.dao.mapper")
 public class MyBatisPlusConfig {
     /**
-     * 拦截器配置
+     * 添加分页插件 拦截器配置
      *
      * @return {@link MybatisPlusInterceptor}
      */

@@ -1,30 +1,29 @@
 package com.katomegumi.zxpicturebackend.model.vo.space.analyze;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+/**
+ * @author Megumi
+ * 空间图片分类分析响应
+ */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Builder
 public class SpaceCategoryAnalyzeResponse implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     /**
-     * 图片分类
+     * 当前图片分类名称
      */
-    private String category;
-
+    private String categoryName;
     /**
-     * 图片数量
+     * 当前分类图片数量
      */
     private Long count;
-
     /**
-     * 分类图片总大小
+     * 当前分类图片总大小
      */
     private Long totalSize;
-
-    private static final long serialVersionUID = 1L;
 }

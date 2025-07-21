@@ -27,28 +27,17 @@ public class UserEditRequest implements Serializable {
     /**
      * 登录名及昵称
      */
-    private String username;
+    private String name;
 
     /**
-     * 手机号 //todo 预留
+     * 手机号 预留
      */
-    private String userPhone;
-
-    /**
-     * 用户性别;0-男 1-女;2-保密(默认)
-     */
-    private Integer userSex;
+    private String phone;
 
     /**
      * 用户简介
      */
-    private String userProfile;
-
-    /**
-     * 出生日期
-     */
-    private Date birthday;
-
+    private String introduction;
 
 }
 

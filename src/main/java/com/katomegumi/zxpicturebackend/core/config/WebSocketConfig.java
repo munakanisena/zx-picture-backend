@@ -1,24 +1,26 @@
 package com.katomegumi.zxpicturebackend.core.config;
 
-import com.katomegumi.zxpicturebackend.manager.websocket.PictureEditHandler;
-import com.katomegumi.zxpicturebackend.manager.websocket.WsHandshakeInterceptor;
+import com.katomegumi.zxpicturebackend.manager.websocket.handler.PictureEditHandler;
+import com.katomegumi.zxpicturebackend.manager.websocket.handler.WsHandshakeInterceptor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
-import javax.annotation.Resource;
-
+/**
+ * @author Mguemi
+ * @description WebSocket配置(相当于springMvc的Controller)
+ */
 @Configuration
-@EnableWebSocket //开启
+@EnableWebSocket
+@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
-    @Resource
-    private PictureEditHandler pictureEditHandler;
 
-    @Resource
-    private WsHandshakeInterceptor wsHandshakeInterceptor;
+    private final PictureEditHandler pictureEditHandler;
 
-    //注册 拦截器 和消息分发器
+    private final WsHandshakeInterceptor wsHandshakeInterceptor;
+
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(pictureEditHandler, "/ws/picture/edit")

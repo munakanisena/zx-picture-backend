@@ -1,90 +1,104 @@
 package com.katomegumi.zxpicturebackend.controller;
 
-import com.katomegumi.zxpicturebackend.core.api.aliyunai.model.SpaceSizeAnalyzeRequest;
-import com.katomegumi.zxpicturebackend.core.common.resp.BaseResponse;
-import com.katomegumi.zxpicturebackend.core.common.util.ResultUtils;
+import com.katomegumi.zxpicturebackend.core.annotation.AuthCheck;
 import com.katomegumi.zxpicturebackend.core.common.exception.ErrorCode;
 import com.katomegumi.zxpicturebackend.core.common.exception.ThrowUtils;
+import com.katomegumi.zxpicturebackend.core.common.resp.BaseResponse;
+import com.katomegumi.zxpicturebackend.core.common.util.ResultUtils;
 import com.katomegumi.zxpicturebackend.core.constant.ApiRouterConstant;
+import com.katomegumi.zxpicturebackend.core.constant.UserConstant;
 import com.katomegumi.zxpicturebackend.model.dto.space.analyze.*;
-import com.katomegumi.zxpicturebackend.model.dao.entity.Space;
 import com.katomegumi.zxpicturebackend.model.vo.space.analyze.*;
-import com.katomegumi.zxpicturebackend.model.dao.entity.User;
+import com.katomegumi.zxpicturebackend.model.vo.space.info.SpaceVO;
 import com.katomegumi.zxpicturebackend.service.SpaceAnalyzeService;
-import com.katomegumi.zxpicturebackend.service.UserService1;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * 图库分析接口
+ * @author Megumi
+ * @description 图库分析接口(仅管理员分析)
  */
 @RestController
 @RequestMapping(ApiRouterConstant.API_SPACE_ANALYZE_URL_PREFIX)
+@RequiredArgsConstructor
 public class SpaceAnalyzeController {
 
-    @Resource
-    private SpaceAnalyzeService spaceAnalyzeService;
-
-    @Resource
-    private UserService1 userService1;
+    private final SpaceAnalyzeService spaceAnalyzeService;
 
     /**
-     * 获取空间使用状态
+     * 分析空间内图片使用情况
+     *
+     * @param spaceUsageAnalyzeRequest 空间使用分析请求
+     * @return 空间使用情况
      */
-    @PostMapping("/usage")
-    public BaseResponse<SpaceUsageAnalyzeResponse> getSpaceUsageAnalyze(
-            @RequestBody SpaceUsageAnalyzeRequest spaceUsageAnalyzeRequest,
-            HttpServletRequest request
-    ) {
+    @PostMapping("/picture-usage")
+    public BaseResponse<SpaceUsageAnalyzeResponse> analyzeSpaceUsed(@RequestBody SpaceUsageAnalyzeRequest spaceUsageAnalyzeRequest) {
         ThrowUtils.throwIf(spaceUsageAnalyzeRequest == null, ErrorCode.PARAMS_ERROR);
-        User loginUser = userService1.getLoginUser(request);
-        SpaceUsageAnalyzeResponse spaceUsageAnalyze = spaceAnalyzeService.getSpaceUsageAnalyze(spaceUsageAnalyzeRequest, loginUser);
-        return ResultUtils.success(spaceUsageAnalyze);
+        return ResultUtils.success(spaceAnalyzeService.analyzeSpaceUsed(spaceUsageAnalyzeRequest));
     }
 
 
-    @PostMapping("/category")
-    public BaseResponse<List<SpaceCategoryAnalyzeResponse>> getSpaceCategoryAnalyze(@RequestBody SpaceCategoryAnalyzeRequest spaceCategoryAnalyzeRequest, HttpServletRequest request) {
+    /**
+     * 分析空间内图片分类 的数量和大小
+     *
+     * @param spaceCategoryAnalyzeRequest 空间分类分析请求
+     * @return 空间分类分析结果
+     */
+    @PostMapping("/picture-categories")
+    public BaseResponse<List<SpaceCategoryAnalyzeResponse>> analyzeSpaceCategory(@RequestBody SpaceCategoryAnalyzeRequest spaceCategoryAnalyzeRequest) {
         ThrowUtils.throwIf(spaceCategoryAnalyzeRequest == null, ErrorCode.PARAMS_ERROR);
-        User loginUser = userService1.getLoginUser(request);
-        List<SpaceCategoryAnalyzeResponse> resultList = spaceAnalyzeService.getSpaceCategoryAnalyze(spaceCategoryAnalyzeRequest, loginUser);
-        return ResultUtils.success(resultList);
+        return ResultUtils.success(spaceAnalyzeService.analyzeSpaceCategory(spaceCategoryAnalyzeRequest));
     }
 
-    @PostMapping("/tag")
-    public BaseResponse<List<SpaceTagAnalyzeResponse>> getSpaceTagAnalyze(@RequestBody SpaceTagAnalyzeRequest spaceTagAnalyzeRequest, HttpServletRequest request) {
+    /**
+     * 分析空间内图片的标签出现次数
+     *
+     * @param spaceTagAnalyzeRequest 空间内图片标签分析请求
+     * @return 空间内图片标签分析结果
+     */
+    @PostMapping("/picture-tags")
+    public BaseResponse<List<SpaceTagAnalyzeResponse>> analyzeSpaceTags(@RequestBody SpaceTagAnalyzeRequest spaceTagAnalyzeRequest) {
         ThrowUtils.throwIf(spaceTagAnalyzeRequest == null, ErrorCode.PARAMS_ERROR);
-        User loginUser = userService1.getLoginUser(request);
-        List<SpaceTagAnalyzeResponse> resultList = spaceAnalyzeService.getSpaceTagAnalyze(spaceTagAnalyzeRequest, loginUser);
-        return ResultUtils.success(resultList);
-    }
-    @PostMapping("/size")
-    public BaseResponse<List<SpaceSizeAnalyzeResponse>> getSpaceSizeAnalyze(@RequestBody SpaceSizeAnalyzeRequest spaceSizeAnalyzeRequest, HttpServletRequest request) {
-        ThrowUtils.throwIf(spaceSizeAnalyzeRequest == null, ErrorCode.PARAMS_ERROR);
-        User loginUser = userService1.getLoginUser(request);
-        List<SpaceSizeAnalyzeResponse> resultList = spaceAnalyzeService.getSpaceSizeAnalyze(spaceSizeAnalyzeRequest, loginUser);
-        return ResultUtils.success(resultList);
-    }
-    @PostMapping("/user")
-    public BaseResponse<List<SpaceUserAnalyzeResponse>> getSpaceUserAnalyze(@RequestBody SpaceUserAnalyzeRequest spaceUserAnalyzeRequest, HttpServletRequest request) {
-        ThrowUtils.throwIf(spaceUserAnalyzeRequest == null, ErrorCode.PARAMS_ERROR);
-        User loginUser = userService1.getLoginUser(request);
-        List<SpaceUserAnalyzeResponse> resultList = spaceAnalyzeService.getSpaceUserAnalyze(spaceUserAnalyzeRequest, loginUser);
-        return ResultUtils.success(resultList);
+        return ResultUtils.success(spaceAnalyzeService.analyzeSpaceTags(spaceTagAnalyzeRequest));
     }
 
-    @PostMapping("/rank")
-    public BaseResponse<List<Space>> getSpaceRankAnalyze(@RequestBody SpaceRankAnalyzeRequest spaceRankAnalyzeRequest, HttpServletRequest request) {
-        ThrowUtils.throwIf(spaceRankAnalyzeRequest == null, ErrorCode.PARAMS_ERROR);
-        User loginUser = userService1.getLoginUser(request);
-        List<Space> resultList = spaceAnalyzeService.getSpaceRankAnalyze(spaceRankAnalyzeRequest, loginUser);
-        return ResultUtils.success(resultList);
+    /**
+     * 分析空间内图片的大小范围
+     *
+     * @param spaceSizeAnalyzeRequest 空间图片大小范围分析请求
+     * @return 空间内图片大小范围分析结果
+     */
+    @PostMapping("/picture-size")
+    public BaseResponse<List<SpaceSizeAnalyzeResponse>> analyzeSpaceSize(@RequestBody SpaceSizeAnalyzeRequest spaceSizeAnalyzeRequest) {
+        ThrowUtils.throwIf(spaceSizeAnalyzeRequest == null, ErrorCode.PARAMS_ERROR);
+        return ResultUtils.success(spaceAnalyzeService.analyzeSpaceSize(spaceSizeAnalyzeRequest));
+    }
+
+    /**
+     * 分析用户空间图片上传行为
+     *
+     * @param spaceUserAnalyzeRequest 用户空间图片上传行为分析请求
+     * @return 用户空间图片上传行为分析结果
+     */
+    @PostMapping("/user-action")
+    public BaseResponse<List<SpaceUserAnalyzeResponse>> analyzeSpaceUserAction(@RequestBody SpaceUserAnalyzeRequest spaceUserAnalyzeRequest) {
+        ThrowUtils.throwIf(spaceUserAnalyzeRequest == null, ErrorCode.PARAMS_ERROR);
+        return ResultUtils.success(spaceAnalyzeService.analyzeSpaceUserAction(spaceUserAnalyzeRequest));
+    }
+
+    //---------------仅管理员使用--------------
+
+    /**
+     * 分析存储使用量 进行排名 获取排名前10的空间列表
+     *
+     * @return 空间排名分析结果
+     */
+    @GetMapping("/picture-rank")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<List<SpaceVO>> analyzeSpaceRank() {
+        return ResultUtils.success(spaceAnalyzeService.analyzeSpaceRank());
     }
 
 }

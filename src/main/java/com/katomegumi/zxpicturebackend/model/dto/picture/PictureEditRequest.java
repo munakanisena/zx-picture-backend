@@ -7,9 +7,13 @@ import java.util.List;
 
 /**
  * 用户编辑更新时使用  两个类区分开来
+ *
+ * @author Megumi
  */
 @Data
 public class PictureEditRequest implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * id
@@ -19,23 +23,26 @@ public class PictureEditRequest implements Serializable {
     /**
      * 图片名称
      */
-    private String name;
+    private String picName;
 
     /**
      * 简介
      */
-    private String introduction;
+    private String picDesc;
 
     /**
-     * 分类
+     * 分类id
      */
-    private String category;
+    private Long categoryId;
 
     /**
      * 标签
      */
     private List<String> tags;
 
-    private static final long serialVersionUID = 1L;
+    /**
+     * 空间id
+     */
+    private Long spaceId;
 }
 

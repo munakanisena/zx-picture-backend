@@ -6,10 +6,13 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 全部 权限和角色
+ * @author Megumi
+ * @description 空间权限配置
  */
 @Data
 public class SpaceUserAuthConfig implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 权限列表
@@ -20,6 +23,4 @@ public class SpaceUserAuthConfig implements Serializable {
      * 角色列表
      */
     private List<SpaceUserRole> roles;
-
-    private static final long serialVersionUID = 1L;
 }

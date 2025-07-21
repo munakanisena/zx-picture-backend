@@ -5,7 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * @author Megumi
  * 查询任务响应类
+ * 根据任务ID查询结果 GET
+ * <a href="https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}">...</a>
  */
 @Data
 @NoArgsConstructor
@@ -47,6 +50,11 @@ public class GetOutPaintingTaskResponse {
         private String taskStatus;
 
         /**
+         * 任务结果统计。
+         */
+        private TaskMetrics taskMetrics;
+
+        /**
          * 提交时间
          * 格式：YYYY-MM-DD HH:mm:ss.SSS
          */
@@ -82,13 +90,18 @@ public class GetOutPaintingTaskResponse {
         private String message;
 
         /**
-         * 任务指标信息
+         * 图片统计信息
          */
-        private TaskMetrics taskMetrics;
+        private Usage usage;
+
+        /**
+         * 请求唯一标识。可用于请求明细溯源和问题排查。
+         */
+        private String requestId;
     }
 
     /**
-     * 表示任务的统计信息
+     * 表示任务结果统计。
      */
     @Data
     public static class TaskMetrics {
@@ -107,6 +120,16 @@ public class GetOutPaintingTaskResponse {
          * 失败任务数
          */
         private Integer failed;
+    }
+
+    /**
+     * 图片统计信息
+     */
+    public static class Usage {
+        /**
+         * 请求次数
+         */
+        private Integer imageCount;
     }
 }
 

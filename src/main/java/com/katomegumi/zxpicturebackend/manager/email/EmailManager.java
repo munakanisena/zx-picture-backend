@@ -2,9 +2,9 @@ package com.katomegumi.zxpicturebackend.manager.email;
 
 import com.katomegumi.zxpicturebackend.core.common.exception.BusinessException;
 import com.katomegumi.zxpicturebackend.core.common.exception.ErrorCode;
-import com.katomegumi.zxpicturebackend.core.constant.RedisConstant;
+import com.katomegumi.zxpicturebackend.core.constant.CacheConstant;
 import com.katomegumi.zxpicturebackend.core.util.EmailUtils;
-import com.katomegumi.zxpicturebackend.manager.redis.VerifyCaptchaManager;
+import com.katomegumi.zxpicturebackend.manager.cache.VerifyCaptchaCacheManager;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class EmailManager {
 
     private final TemplateEngine  templateEngine;
 
-    private final VerifyCaptchaManager verifyCaptchaManager;
+    private final VerifyCaptchaCacheManager verifyCaptchaCacheManager;
 
     @Value("${verify.code.length}")
     //验证码长度
@@ -62,10 +62,10 @@ public class EmailManager {
             //获取验证码
             String randomCaptcha = EmailUtils.getRandomCaptcha(length);
             //将验证码存入redis
-            verifyCaptchaManager.putCaptchaIntoRedis(randomCaptcha,to);
-            //获取邮件模版 todo 模版还需要优化
+            verifyCaptchaCacheManager.putCaptchaIntoRedis(randomCaptcha, to);
+            //获取邮件模版
             Context context = new Context();
-            context.setVariable(RedisConstant.EMAIL.CAPTCHA,randomCaptcha);
+            context.setVariable(CacheConstant.EMAIL.GET_CAPTCHA, randomCaptcha);
             String htmlContent = templateEngine.process("RegisterTemplate.html", context);
             mimeMessageHelper.setText(htmlContent,true);
             javaMailSender.send(mimeMessage);
@@ -89,10 +89,10 @@ public class EmailManager {
             //获取随机验证码
             String randomCaptcha = EmailUtils.getRandomCaptcha(length);
             //添加到redis 重置密码不做限制
-            verifyCaptchaManager.set(RedisConstant.EMAIL.FORGOT + to,randomCaptcha, 5,TimeUnit.MINUTES);
+            verifyCaptchaCacheManager.set(CacheConstant.EMAIL.FORGOT + to, randomCaptcha, 5, TimeUnit.MINUTES);
             //获取邮件模版
             Context context = new Context();
-            context.setVariable(RedisConstant.EMAIL.CAPTCHA,randomCaptcha);
+            context.setVariable(CacheConstant.EMAIL.GET_CAPTCHA, randomCaptcha);
             String htmlContent = templateEngine.process("ForgotPasswordTemplate.html", context);
             mimeMessageHelper.setText(htmlContent,true);
             javaMailSender.send(mimeMessage);

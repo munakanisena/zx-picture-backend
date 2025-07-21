@@ -5,10 +5,14 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 通用分析请求
+ * 空间通用分析请求
+ *
+ * @author Megumi
  */
 @Data
 public class SpaceAnalyzeRequest implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 空间 ID
@@ -25,5 +29,4 @@ public class SpaceAnalyzeRequest implements Serializable {
      */
     private boolean queryAll;
 
-    private static final long serialVersionUID = 1L;
 }

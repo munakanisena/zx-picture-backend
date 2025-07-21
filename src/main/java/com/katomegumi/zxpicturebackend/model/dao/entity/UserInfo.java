@@ -1,19 +1,24 @@
 package com.katomegumi.zxpicturebackend.model.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 用户信息表
+ *
  * @author Megumi
  * @TableName user_info
  */
-@TableName(value ="user_info")
+@TableName(value = "user_info")
 @Data
 public class UserInfo implements Serializable {
+
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
+
     /**
      * 主键ID
      */
@@ -23,7 +28,7 @@ public class UserInfo implements Serializable {
     /**
      * 登录名及昵称
      */
-    private String username;
+    private String name;
 
     /**
      * 密码
@@ -33,32 +38,22 @@ public class UserInfo implements Serializable {
     /**
      * 用户邮箱
      */
-    private String userEmail;
+    private String email;
 
     /**
      * 用户手机号
      */
-    private String userPhone;
+    private String phone;
 
     /**
      * 用户头像
      */
-    private String userAvatar;
-
-    /**
-     * 用户性别;0-男 1-女
-     */
-    private Integer userSex;
+    private String avatar;
 
     /**
      * 用户简介
      */
-    private String userProfile;
-
-    /**
-     * 出生日期
-     */
-    private Date birthday;
+    private String introduction;
 
     /**
      * 会员编号
@@ -68,7 +63,7 @@ public class UserInfo implements Serializable {
     /**
      * 用户角色（USER-普通用户, ADMIN-管理员）
      */
-    private String userRole;
+    private String role;
 
     /**
      * 是否为会员;0-否 1-是
@@ -101,6 +96,4 @@ public class UserInfo implements Serializable {
      */
     private Date updateTime;
 
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 }

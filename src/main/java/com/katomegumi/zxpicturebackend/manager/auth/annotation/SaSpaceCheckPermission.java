@@ -11,8 +11,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 空间权限认证：必须具有指定权限才能进入该方法
+ * 权限认证(空间版本)必须具有指定权限才能进入该方法
  * <p> 可标注在函数、类上（效果等同于标注在此类的所有方法上）
+ *
+ * @author Megumi
  */
 @SaCheckPermission(type = StpKit.SPACE_TYPE)
 @Retention(RetentionPolicy.RUNTIME)
